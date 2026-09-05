@@ -1,8 +1,8 @@
 {
   "name": "grok-bot-marketplace",
   "displayName": "Grok Bot Marketplace",
-  "version": "0.1.0",
-  "description": "Browse and search the public Grok Bot marketplace from an agent. Returns catalog fields plus grokbot:// install links — there is no public install API.",
+  "version": "0.2.0",
+  "description": "Browse the public Grok Bot marketplace catalog and discover template shares on X. Returns grokbot:// install links — there is no public install API.",
   "author": {
     "name": "David Stredansky",
     "email": "d.stredansky@gmail.com"
@@ -15,6 +15,8 @@
     "grok-bot",
     "marketplace",
     "xai",
+    "x",
+    "twitter",
     "skills"
   ],
   "logo": "assets/logo.svg"

@@ -1,3 +1,6 @@
+.env
+.env.local
+data/x-checkpoint.json
 __pycache__/
 *.py[cod]
 *.egg-info/

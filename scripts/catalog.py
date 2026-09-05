@@ -28,7 +28,7 @@ MARKETPLACE_URL = "https://x.ai/bot/marketplace"
 MARKETPLACE_CATALOG_URL = f"{MARKETPLACE_URL}#marketplace-catalog"
 BOT_PAGE_URL = MARKETPLACE_URL + "/bots/{id}"
 USER_AGENT = (
-    "grok-bot-marketplace-plugin/0.1 "
+    "grok-bot-marketplace-plugin/0.2 "
     "(+https://github.com/dadoedo/grok-bot-marketplace-plugin)"
 )
 INSTALL_NOTE = (
@@ -103,17 +103,56 @@ def _find_json_key(text: str, key: str) -> int:
 
 def parse_templates(html: str) -> list[dict[str, Any]]:
     """Extract the embedded ``templates`` array from marketplace HTML."""
-    text = flight_text(html)
-    value_at = _find_json_key(text, "templates")
-    if value_at < 0:
+    try:
+        text = flight_text(html)
+    except CatalogError:
+        text = ""
+    templates: list[dict[str, Any]] = []
+    if text:
+        value_at = _find_json_key(text, "templates")
+        if value_at >= 0:
+            try:
+                raw = _json_value_at_generic(text, value_at)
+                parsed = json.loads(raw)
+                if isinstance(parsed, list):
+                    templates = [item for item in parsed if isinstance(item, dict)]
+            except (CatalogError, json.JSONDecodeError):
+                templates = []
+        if not templates:
+            templates = _templates_from_addhref(text)
+    if not templates:
         raise CatalogError(
-            "No templates array in marketplace payload. The catalog embed may have changed."
+            "No templates array in marketplace payload. "
+            "The catalog embed may have changed, or the HTML was not the marketplace page."
         )
-    raw = _json_value_at_generic(text, value_at)
-    templates = json.loads(raw)
-    if not isinstance(templates, list) or not templates:
-        raise CatalogError("Marketplace templates array was empty or not a list")
     return templates
+
+
+def _templates_from_addhref(text: str) -> list[dict[str, Any]]:
+    """Fallback: collect bot objects that already have a grokbot:// addHref."""
+    found: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    search_from = 0
+    while True:
+        idx = text.find('"addHref"', search_from)
+        if idx < 0:
+            break
+        start = text.rfind("{", 0, idx)
+        while start >= 0:
+            try:
+                obj = json.loads(_json_value_at_generic(text, start))
+            except (CatalogError, json.JSONDecodeError):
+                start = text.rfind("{", 0, start)
+                continue
+            href = str(obj.get("addHref") or "") if isinstance(obj, dict) else ""
+            bot_id = str(obj.get("id") or "") if isinstance(obj, dict) else ""
+            if href.startswith("grokbot://") and bot_id and bot_id not in seen:
+                seen.add(bot_id)
+                found.append(obj)
+                break
+            start = text.rfind("{", 0, start)
+        search_from = idx + 1
+    return found
 
 
 def parse_bot_detail(html: str, bot_id: str | None = None) -> dict[str, Any]:
@@ -254,9 +293,32 @@ def fetch_url(url: str, timeout: int = 30) -> str:
     )
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
-            return resp.read().decode("utf-8", errors="replace")
+            status = int(getattr(resp, "status", None) or getattr(resp, "code", 200) or 200)
+            body = resp.read().decode("utf-8", errors="replace")
+    except urllib.error.HTTPError as exc:
+        snippet = ""
+        try:
+            snippet = exc.read().decode("utf-8", errors="replace")[:180]
+        except Exception:
+            snippet = ""
+        extra = f" Body starts with: {snippet!r}" if snippet else ""
+        raise CatalogError(
+            f"Failed to fetch {url} (HTTP {exc.code}). "
+            f"Expected the public marketplace HTML catalog.{extra}"
+        ) from exc
     except urllib.error.URLError as exc:
         raise CatalogError(f"Failed to fetch {url}: {exc}") from exc
+    lowered = body.lower()
+    if "self.__next_f" not in body and "<html" not in lowered:
+        raise CatalogError(
+            f"Unexpected response from {url} (HTTP {status}, {len(body)} bytes). "
+            "Expected marketplace HTML with an embedded Next.js catalog payload."
+        )
+    if "cf-browser-verification" in lowered or "just a moment" in lowered:
+        raise CatalogError(
+            f"Marketplace HTML from {url} looks like a bot challenge, not the catalog."
+        )
+    return body
 
 
 def build_catalog_document(templates: list[dict[str, Any]], *, fetched_at: str | None = None) -> dict[str, Any]:
@@ -567,7 +629,7 @@ def _shared_cli_flags() -> argparse.ArgumentParser:
 def build_parser() -> argparse.ArgumentParser:
     shared = _shared_cli_flags()
     parser = argparse.ArgumentParser(
-        description="List, search, and compare Grok Bot marketplace templates. "
+        description="Browse the Grok Bot marketplace catalog and discover shares on X. "
         "Install is via grokbot:// addHref only — no REST install API.",
         parents=[shared],
     )
@@ -633,6 +695,24 @@ def build_parser() -> argparse.ArgumentParser:
         help="Include full bot list in the refresh response",
     )
     p_refresh.set_defaults(func=cmd_refresh)
+
+    import x_feed
+
+    p_xs = sub.add_parser(
+        "x-search",
+        parents=[shared],
+        help="Search recent X posts that share Grok Bot marketplace/templates (needs X_BEARER_TOKEN)",
+    )
+    x_feed.add_x_arguments(p_xs)
+    p_xs.set_defaults(func=x_feed.cmd_search, sort="engagement")
+
+    p_xm = sub.add_parser(
+        "x-monitor",
+        parents=[shared],
+        help="Fetch X posts newer than data/x-checkpoint.json (needs X_BEARER_TOKEN)",
+    )
+    x_feed.add_x_arguments(p_xm)
+    p_xm.set_defaults(func=x_feed.cmd_monitor, sort="recent")
     return parser
 
 

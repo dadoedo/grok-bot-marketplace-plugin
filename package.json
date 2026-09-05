@@ -1,8 +1,8 @@
 {
   "name": "grok-bot-marketplace-plugin",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
-  "description": "Cursor community Open Plugin: browse and search the Grok Bot marketplace.",
+  "description": "Cursor community Open Plugin: Grok Bot marketplace catalog plus X discovery feed.",
   "license": "MIT",
   "author": "David Stredansky <d.stredansky@gmail.com>",
   "homepage": "https://github.com/dadoedo/grok-bot-marketplace-plugin",
@@ -15,10 +15,12 @@
     "plugin",
     "agent-plugins",
     "grok-bot",
-    "marketplace"
+    "marketplace",
+    "x-api"
   ],
   "scripts": {
     "refresh": "python3 scripts/catalog.py refresh",
+    "x-search": "python3 scripts/catalog.py x-search",
     "test": "python3 -m unittest discover -s tests -v"
   },
   "engines": {
