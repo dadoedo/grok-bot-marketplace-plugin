@@ -49,6 +49,8 @@ Example (truncated):
 
 Python 3.10+. Stdlib only — no pip packages.
 
+Marketing page (GitHub Pages): [`site/`](site/) — working title **XBots** (temporary). Preview with `python3 -m http.server 8080 --directory site`. Enable Pages via GitHub Actions (see [`site/README.md`](site/README.md)); the branch UI cannot serve `/site`.
+
 ## Two feeds
 
 JSON envelopes and cards are labeled so marketplace and X results are never mixed up:
@@ -215,6 +217,7 @@ Same repo can go to [cursor.com/marketplace/publish](https://cursor.com/marketpl
 | [`scripts/x_feed.py`](scripts/x_feed.py) | X API client (also runnable standalone) |
 | [`data/catalog.json`](data/catalog.json) | Catalog snapshot |
 | [`data/demo/x-search-recent.json`](data/demo/x-search-recent.json) | Offline X feed fixture |
+| [`site/`](site/) | GitHub Pages landing (working title XBots) |
 | [`.env.example`](.env.example) | Token template (copy to `.env`) |
 
 ## Tests

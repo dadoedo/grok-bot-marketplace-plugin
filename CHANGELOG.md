@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.1
+
+- Static landing site in `site/` (GitHub Pages via Actions). Working title XBots is temporary.
+
 ## 0.3.0
 
 - Offline X feed: `--demo` / `X_DEMO=1` / missing-token fallback against `data/demo/x-search-recent.json`
