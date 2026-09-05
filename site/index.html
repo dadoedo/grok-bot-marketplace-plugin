@@ -5,7 +5,7 @@
       BRAND SWAP — working title "XBots" / xbots.so is TEMPORARY.
       Search: data-brand, brand-name, brand-domain, og:title
       Visuals follow Grok Bot marketplace shape/color/avatar conventions.
-      Catalog avatars from data/catalog.json win over generated hero art.
+      Catalog avatars from data/catalog.json still drive Browse. Hero/OG art is brand packaging.
     -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -15,7 +15,8 @@
       content="XBots is a Cursor Open Plugin for discovering Grok Bots: the official marketplace catalog plus viral template shares on X. Discovery only — not an installer."
     />
     <meta name="theme-color" content="#0b0b0c" />
-    <link rel="icon" href="./assets/brand-icon.png" type="image/png" />
+    <link rel="icon" href="./assets/logo.png" type="image/png" />
+    <link rel="apple-touch-icon" href="./assets/logo.png" />
     <link rel="canonical" href="https://xbots.so/" />
 
     <meta property="og:type" content="website" />
@@ -25,14 +26,16 @@
       property="og:description"
       content="Browse the Grok Bot marketplace catalog and viral grokbot:// shares on X. Cursor discovery plugin — not an installer."
     />
-    <meta property="og:image" content="./assets/brand-icon.png" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content="./assets/og.png" />
+    <meta property="og:image:width" content="1280" />
+    <meta property="og:image:height" content="720" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="XBots — Find your next AI teammate" />
     <meta
       name="twitter:description"
       content="Marketplace catalog + X viral feed for Grok Bots. Install is still a grokbot:// link."
     />
-    <meta name="twitter:image" content="./assets/brand-icon.png" />
+    <meta name="twitter:image" content="./assets/og.png" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -47,24 +50,23 @@
     <header class="wrap">
       <nav class="nav" aria-label="Primary">
         <a class="brand" href="#top">
-          <img class="brand-icon" src="./assets/brand-icon.png" width="36" height="36" alt="" />
-          <span class="brand-lockup">
-            <span class="brand-name">XBots</span>
-            <span class="brand-domain">xbots.so · working title</span>
-          </span>
+          <img class="brand-logo" src="./assets/logo.png" width="160" height="90" alt="XBots" />
+          <span class="brand-domain">xbots.so · working title</span>
         </a>
         <div class="nav-links">
-          <a href="#browse">Browse</a>
+            <a href="#feeds">Feeds</a>
+            <a href="#browse">Browse</a>
           <a href="#how">How it works</a>
           <a href="#cli">CLI</a>
           <a href="#setup">X setup</a>
           <a href="https://github.com/dadoedo/grok-bot-marketplace-plugin">GitHub</a>
         </div>
       </nav>
-      <p class="note">
-        <strong>Discovery plugin</strong> for Cursor agents — not an installer, not a store,
-        not an official x.ai or Cursor product. Add still means a
-        <code>grokbot://</code> deep link or the marketplace URL.
+      <p class="honesty-callout" id="honesty">
+        <strong>Honesty</strong>
+        Cursor Open Plugin for discovery — not an installer, not a store, not an official
+        x.ai or Cursor product. Add still means a <code>grokbot://</code> deep link or the
+        marketplace URL.
       </p>
     </header>
 
@@ -72,11 +74,11 @@
       <section class="wrap hero" id="top">
         <div>
           <h1>Find your next AI teammate.</h1>
-          <p class="lede">
-            XBots lets Cursor agents browse the public Grok Bot marketplace and the
-            templates people actually share on X. Same catalog faces and shapes you
-            already know. You still open Add yourself.
-          </p>
+            <p class="lede">
+              A Cursor Open Plugin with two discovery feeds: the public Grok Bot
+              marketplace catalog, and the templates people actually share on X.
+              Agents return cards. You still open Add yourself.
+            </p>
           <div class="cta-row">
             <a class="btn btn-solid" href="https://github.com/dadoedo/grok-bot-marketplace-plugin"
               >View the repo</a
@@ -88,12 +90,51 @@
             as a local Cursor plugin. Placeholder domain <span class="brand-domain">xbots.so</span>.
           </p>
         </div>
-        <div>
-          <div class="hero-grid" id="featured" aria-label="Featured Grok Bots from the marketplace catalog"></div>
+        <div class="hero-art">
+          <img
+            class="hero-photo"
+            src="./assets/hero.png"
+            width="1280"
+            height="720"
+            alt="XBots dual feed: Grok Bot marketplace catalog beside viral template shares on X"
+          />
         </div>
       </section>
 
       <div class="wrap stats" id="stats">69 public Bots</div>
+
+      <section class="wrap" id="feeds">
+        <div class="section-head">
+          <h2>Two feeds. One honest plugin.</h2>
+          <p class="kicker">feed: marketplace · feed: x</p>
+        </div>
+        <div class="feeds-split">
+          <article class="feed-panel feed-m">
+            <p class="pill pill-m">feed: marketplace</p>
+            <h3>Official catalog</h3>
+            <p>
+              List, search, and compare public Grok Bots from x.ai/bot/marketplace.
+              Real names, creators, shapes, and S3 avatars — not invented characters.
+            </p>
+          </article>
+          <article class="feed-panel feed-x">
+            <p class="pill pill-x">feed: x</p>
+            <h3>Viral shares on X</h3>
+            <p>
+              Recent search for marketplace URLs and <code>grokbot://</code> templates.
+              <code>--demo</code> works offline. Live search uses your Bearer token.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="wrap" id="featured-row">
+        <div class="section-head">
+          <h2>From the marketplace</h2>
+          <p class="kicker">Live catalog.json · shape, color, creator image</p>
+        </div>
+        <div class="hero-grid" id="featured" aria-label="Featured Grok Bots from the marketplace catalog"></div>
+      </section>
 
       <section class="wrap" id="browse">
         <div class="section-head">

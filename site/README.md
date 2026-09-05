@@ -2,7 +2,9 @@
 
 Static marketing page for the **Grok Bot Marketplace Plugin**.
 
-Working title **XBots** / **xbots.so** is temporary (`xbots.io` is taken). Swap-friendly: search `data-brand`, `.brand-name`, `.brand-domain` in `index.html` / `styles.css`.
+Working title **XBots** / **xbots.so** is temporary (`xbots.io` is taken — do not claim it). Swap-friendly: search `data-brand`, `.brand-name`, `.brand-domain` in `index.html` / `styles.css`. Copy bank: [`marketing-copy.md`](marketing-copy.md).
+
+Brand files in [`assets/`](assets/): `logo.png`, `hero.png`, `og.png`.
 
 This is a discovery Open Plugin landing page — **not** an installer and **not** an official x.ai product.
 
@@ -53,9 +55,9 @@ Placeholder domain: `xbots.so`
 | --- | --- |
 | Short name | `XBots` |
 | Domain | `xbots.so` (placeholder) |
-| Mark | `assets/brand-icon.png` (secondary; catalog faces lead the hero) |
-
-Optional later drops — see [`assets/README.md`](assets/README.md). Do not replace the catalog grid with invented Synth/Nova characters.
+| Mark | `assets/logo.png` |
+| Hero | `assets/hero.png` |
+| OG | `assets/og.png` |
 
 ## Honesty (do not water down)
 

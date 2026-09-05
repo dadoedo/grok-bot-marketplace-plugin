@@ -111,6 +111,15 @@ img {
   border-radius: 10px;
 }
 
+.brand-logo {
+  height: 48px;
+  width: auto;
+  max-width: 168px;
+  object-fit: contain;
+  object-position: left center;
+  border-radius: 8px;
+}
+
 .brand-lockup {
   display: flex;
   flex-direction: column;
@@ -149,6 +158,25 @@ img {
 .note strong {
   color: var(--muted);
   font-weight: 600;
+}
+
+.honesty-callout {
+  margin: 0.9rem 0 0;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg-elev);
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+
+.honesty-callout strong {
+  display: inline-block;
+  margin-right: 0.45rem;
+  color: var(--text);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 /* Hero */
@@ -208,6 +236,69 @@ h1 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.85rem 0.7rem;
+}
+
+.hero-art {
+  min-width: 0;
+}
+
+.hero-photo {
+  width: 100%;
+  height: auto;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: #08080a;
+}
+
+.feeds-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+}
+
+.feed-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.2rem 1.2rem 1.3rem;
+}
+
+.feed-panel h3 {
+  margin: 0.45rem 0 0.4rem;
+  font-size: 1.15rem;
+}
+
+.feed-panel p:last-child {
+  margin: 0;
+  color: var(--muted);
+}
+
+.feed-m {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--glow-cyan) 22%, transparent);
+}
+
+.feed-x {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--glow-violet) 28%, transparent);
+}
+
+.pill {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  border-radius: 999px;
+  padding: 0.22rem 0.6rem;
+  margin: 0;
+  border: 1px solid var(--line);
+}
+
+.pill-m {
+  color: var(--glow-cyan);
+  border-color: color-mix(in srgb, var(--glow-cyan) 35%, transparent);
+}
+
+.pill-x {
+  color: var(--glow-violet);
+  border-color: color-mix(in srgb, var(--glow-violet) 40%, transparent);
 }
 
 .mini-card {
@@ -612,7 +703,8 @@ footer {
   .hero,
   .bot-grid,
   .steps,
-  .setup-grid {
+  .setup-grid,
+  .feeds-split {
     grid-template-columns: 1fr;
   }
 

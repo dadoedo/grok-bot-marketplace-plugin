@@ -3,6 +3,7 @@
 ## 0.3.1
 
 - Static landing site in `site/` (GitHub Pages via Actions). Working title XBots / xbots.so.
+- Brand packaging: `site/assets/{logo,hero,og}.png` plus `site/marketing-copy.md`.
 - Landing cards use live marketplace catalog fields (shape, color, S3 avatars) — not invented characters.
 
 ## 0.3.0
