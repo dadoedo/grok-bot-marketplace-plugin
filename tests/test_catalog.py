@@ -118,6 +118,8 @@ class CatalogQueryTests(unittest.TestCase):
         card = catalog.public_card(bot)
         self.assertEqual(card["creator"], "Ada Lovelace")
         self.assertEqual(card["installCount"], 12)
+        self.assertEqual(card["feed"], "marketplace")
+        self.assertEqual(card["source"], "marketplace")
         for field in catalog.CARD_FIELDS:
             self.assertIn(field, card)
         self.assertIsInstance(card["name"], str)
@@ -240,6 +242,7 @@ class CatalogCliTests(unittest.TestCase):
         payload = json.loads(buf.getvalue())
         self.assertIn("results", payload)
         self.assertEqual(payload.get("query"), "outbound")
+        self.assertEqual(payload.get("feed"), "marketplace")
 
 
 class RefreshWrapperTests(unittest.TestCase):

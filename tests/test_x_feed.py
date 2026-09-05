@@ -51,6 +51,29 @@ class ExtractTests(unittest.TestCase):
         self.assertEqual(refs["templateIds"], ["abc_12"])
         self.assertTrue(refs["addHrefs"][0].startswith("grokbot://"))
 
+    def test_extracts_listing_and_share_template_links(self):
+        tweet = {
+            "text": (
+                "see https://x.ai/bot/marketplace and "
+                "https://x.ai/bot/marketplace/share/bot-template?id=zz9 "
+                "grokbot://app/v1/bot-template?id=zz9&utm=x"
+            ),
+            "entities": {
+                "urls": [
+                    {
+                        "expanded_url": "https://x.ai/bot/marketplace",
+                        "url": "https://t.co/m",
+                    }
+                ]
+            },
+        }
+        urls = x_feed.collect_urls(tweet)
+        refs = x_feed.extract_bot_refs(urls, tweet["text"])
+        self.assertIn("https://x.ai/bot/marketplace", refs["marketplaceUrls"])
+        self.assertTrue(any("share/bot-template" in u for u in refs["shareUrls"]))
+        self.assertIn("zz9", refs["templateIds"])
+        self.assertTrue(any(h.startswith("grokbot://") for h in refs["addHrefs"]))
+
     def test_build_query_ands_plain_keywords(self):
         q = x_feed.build_query("researchy")
         self.assertIn("researchy", q)
@@ -76,17 +99,51 @@ class AuthTests(unittest.TestCase):
             self.assertEqual(env2["X_BEARER_TOKEN"], "existing")
             self.assertEqual(x_feed.resolve_bearer_token({"TWITTER_BEARER_TOKEN": "tw"}), "tw")
 
-    def test_cli_without_token_exits_3(self):
-        env = {k: v for k, v in os.environ.items() if k not in x_feed.TOKEN_ENV_NAMES}
+    def _stripped_env(self):
+        return {
+            k: v
+            for k, v in os.environ.items()
+            if k not in x_feed.TOKEN_ENV_NAMES and k != "X_DEMO"
+        }
+
+    def test_cli_without_token_falls_back_to_demo(self):
+        env = self._stripped_env()
+        err = io.StringIO()
+        out = io.StringIO()
+
+        def boom(*_a, **_k):
+            raise AssertionError("demo fallback must not call X HTTP")
+
+        with mock.patch.dict(os.environ, env, clear=True), mock.patch.object(
+            x_feed, "DEFAULT_ENV_PATH", Path("/tmp/grok-bot-marketplace-no-env")
+        ), mock.patch("sys.stderr", err), mock.patch("sys.stdout", out), mock.patch(
+            "x_feed.urllib.request.urlopen", boom
+        ):
+            code = catalog.main(["x-search", "--max-results", "10"])
+        self.assertEqual(code, 0)
+        setup = json.loads(err.getvalue())
+        self.assertEqual(setup["setup"]["env"], "X_BEARER_TOKEN")
+        self.assertTrue(setup["marketplaceStillWorks"])
+        self.assertTrue(setup["demoFallback"])
+        payload = json.loads(out.getvalue())
+        self.assertTrue(payload["demo"])
+        self.assertFalse(payload["live"])
+        self.assertEqual(payload["feed"], "x")
+        self.assertGreaterEqual(payload["resultCount"], 1)
+        self.assertTrue(all(p.get("feed") == "x" for p in payload["results"]))
+
+    def test_live_without_token_exits_3(self):
+        env = self._stripped_env()
         err = io.StringIO()
         with mock.patch.dict(os.environ, env, clear=True), mock.patch.object(
             x_feed, "DEFAULT_ENV_PATH", Path("/tmp/grok-bot-marketplace-no-env")
         ), mock.patch("sys.stderr", err):
-            code = catalog.main(["x-search", "--max-results", "10"])
+            code = catalog.main(["x-search", "--live"])
         self.assertEqual(code, 3)
         payload = json.loads(err.getvalue())
         self.assertEqual(payload["setup"]["env"], "X_BEARER_TOKEN")
         self.assertTrue(payload["marketplaceStillWorks"])
+        self.assertFalse(payload.get("demoFallback"))
 
 
 class SearchMockTests(unittest.TestCase):
@@ -172,6 +229,108 @@ class SearchMockTests(unittest.TestCase):
         with self.assertRaises(x_feed.XAuthError) as ctx:
             x_feed.x_search_request(query="q", token="bad", urlopen=boom)
         self.assertIn("401", str(ctx.exception))
+
+
+class DemoModeTests(unittest.TestCase):
+    def _stripped_env(self, extra=None):
+        env = {
+            k: v
+            for k, v in os.environ.items()
+            if k not in x_feed.TOKEN_ENV_NAMES and k != "X_DEMO"
+        }
+        if extra:
+            env.update(extra)
+        return env
+
+    def test_demo_flag_never_calls_http_even_with_token(self):
+        def boom(*_a, **_k):
+            raise AssertionError(" --demo must not call X HTTP")
+
+        out = io.StringIO()
+        err = io.StringIO()
+        env = self._stripped_env({"X_BEARER_TOKEN": "should-not-be-used"})
+        with mock.patch.dict(os.environ, env, clear=True), mock.patch(
+            "x_feed.urllib.request.urlopen", boom
+        ), mock.patch("sys.stdout", out), mock.patch("sys.stderr", err):
+            code = catalog.main(["x-search", "--demo", "--format", "json"])
+        self.assertEqual(code, 0)
+        payload = json.loads(out.getvalue())
+        self.assertTrue(payload["demo"])
+        self.assertFalse(payload["live"])
+        self.assertEqual(payload["feed"], "x")
+        self.assertGreaterEqual(payload["resultCount"], 2)
+        self.assertIn("x-search-recent.json", (payload.get("meta") or {}).get("fixture") or "")
+
+    def test_x_demo_env_and_viral_ranks_engagement(self):
+        def boom(*_a, **_k):
+            raise AssertionError("X_DEMO=1 must not call X HTTP")
+
+        out = io.StringIO()
+        env = self._stripped_env({"X_DEMO": "1"})
+        with mock.patch.dict(os.environ, env, clear=True), mock.patch.object(
+            x_feed, "DEFAULT_ENV_PATH", Path("/tmp/grok-bot-marketplace-no-env")
+        ), mock.patch("x_feed.urllib.request.urlopen", boom), mock.patch(
+            "sys.stdout", out
+        ), mock.patch("sys.stderr", io.StringIO()):
+            code = catalog.main(["x-viral", "--format", "json"])
+        self.assertEqual(code, 0)
+        payload = json.loads(out.getvalue())
+        self.assertEqual(payload["sort"], "engagement")
+        self.assertTrue(payload["demo"])
+        ranked = payload["results"]
+        self.assertGreaterEqual(len(ranked), 2)
+        scores = [x_feed.engagement_score(p) for p in ranked]
+        self.assertEqual(scores, sorted(scores, reverse=True))
+        self.assertEqual(ranked[0]["id"], "1987654321098765430")
+        self.assertEqual(ranked[0]["author"]["username"], "viralshare")
+
+    def test_x_trending_alias_and_text_feed_label(self):
+        out = io.StringIO()
+        env = self._stripped_env()
+        with mock.patch.dict(os.environ, env, clear=True), mock.patch.object(
+            x_feed, "DEFAULT_ENV_PATH", Path("/tmp/grok-bot-marketplace-no-env")
+        ), mock.patch("sys.stdout", out), mock.patch("sys.stderr", io.StringIO()):
+            code = catalog.main(["x-trending", "--demo", "--format", "text"])
+        self.assertEqual(code, 0)
+        text = out.getvalue()
+        self.assertIn("feed: x (demo)", text)
+        self.assertIn("matched [marketplace]:", text)
+
+    def test_demo_monitor_does_not_write_checkpoint(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            ck = Path(tmp) / "x-checkpoint.json"
+            env = self._stripped_env()
+            out = io.StringIO()
+            with mock.patch.dict(os.environ, env, clear=True), mock.patch.object(
+                x_feed, "DEFAULT_ENV_PATH", Path("/tmp/grok-bot-marketplace-no-env")
+            ), mock.patch("sys.stdout", out), mock.patch("sys.stderr", io.StringIO()):
+                code = x_feed.main(
+                    [
+                        "--catalog",
+                        str(ROOT / "data" / "catalog.json"),
+                        "monitor",
+                        "--demo",
+                        "--checkpoint",
+                        str(ck),
+                    ]
+                )
+            self.assertEqual(code, 0)
+            self.assertFalse(ck.exists())
+            payload = json.loads(out.getvalue())
+            self.assertTrue(payload["demo"])
+            self.assertNotIn("checkpointSinceId", payload)
+
+    def test_demo_keyword_filters_text(self):
+        out = io.StringIO()
+        env = self._stripped_env()
+        with mock.patch.dict(os.environ, env, clear=True), mock.patch.object(
+            x_feed, "DEFAULT_ENV_PATH", Path("/tmp/grok-bot-marketplace-no-env")
+        ), mock.patch("sys.stdout", out), mock.patch("sys.stderr", io.StringIO()):
+            code = catalog.main(["x-search", "--demo", "Researchy"])
+        self.assertEqual(code, 0)
+        payload = json.loads(out.getvalue())
+        self.assertEqual(payload["resultCount"], 1)
+        self.assertIn("Researchy", payload["results"][0]["text"])
 
 
 class CatalogHardenTests(unittest.TestCase):

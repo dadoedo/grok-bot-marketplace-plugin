@@ -28,7 +28,7 @@ MARKETPLACE_URL = "https://x.ai/bot/marketplace"
 MARKETPLACE_CATALOG_URL = f"{MARKETPLACE_URL}#marketplace-catalog"
 BOT_PAGE_URL = MARKETPLACE_URL + "/bots/{id}"
 USER_AGENT = (
-    "grok-bot-marketplace-plugin/0.2 "
+    "grok-bot-marketplace-plugin/0.3 "
     "(+https://github.com/dadoedo/grok-bot-marketplace-plugin)"
 )
 INSTALL_NOTE = (
@@ -272,6 +272,8 @@ def public_card(bot: dict[str, Any]) -> dict[str, Any]:
         "installCount": bot.get("installCount"),
         "marketplaceUrl": str(bot.get("marketplaceUrl") or marketplace_url_for(bot_id)),
         "addHref": str(bot.get("addHref") or ""),
+        "feed": "marketplace",
+        "source": "marketplace",
     }
     for key in DETAIL_LIST_FIELDS:
         if key in bot:
@@ -479,6 +481,7 @@ def envelope(
 ) -> dict[str, Any]:
     payload = {
         "source": document.get("source") or MARKETPLACE_CATALOG_URL,
+        "feed": "marketplace",
         "fetchedAt": document.get("fetchedAt"),
         "botCount": document.get("botCount"),
         "resultCount": len(results),
@@ -498,6 +501,7 @@ def print_json(payload: Any) -> None:
 
 def print_text_cards(payload: dict[str, Any]) -> None:
     print(f"Source: {payload.get('source')}  (fetched {payload.get('fetchedAt')})")
+    print(f"feed: marketplace")
     print(f"Results: {payload.get('resultCount')} / {payload.get('botCount')} bots in snapshot")
     print(INSTALL_NOTE)
     print()
@@ -701,15 +705,25 @@ def build_parser() -> argparse.ArgumentParser:
     p_xs = sub.add_parser(
         "x-search",
         parents=[shared],
-        help="Search recent X posts that share Grok Bot marketplace/templates (needs X_BEARER_TOKEN)",
+        help="Search recent X posts that share Grok Bot marketplace/templates "
+        "(demo fixture if no token; --live requires X_BEARER_TOKEN)",
     )
     x_feed.add_x_arguments(p_xs)
     p_xs.set_defaults(func=x_feed.cmd_search, sort="engagement")
 
+    p_xv = sub.add_parser(
+        "x-viral",
+        aliases=["x-trending"],
+        parents=[shared],
+        help="X feed ranked by engagement (demo fixture if no token; --live for API)",
+    )
+    x_feed.add_x_arguments(p_xv)
+    p_xv.set_defaults(func=x_feed.cmd_viral, sort="engagement")
+
     p_xm = sub.add_parser(
         "x-monitor",
         parents=[shared],
-        help="Fetch X posts newer than data/x-checkpoint.json (needs X_BEARER_TOKEN)",
+        help="Fetch X posts newer than data/x-checkpoint.json (demo if no token; --live for API)",
     )
     x_feed.add_x_arguments(p_xm)
     p_xm.set_defaults(func=x_feed.cmd_monitor, sort="recent")

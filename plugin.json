@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "grok-bot-marketplace",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Browse the public Grok Bot marketplace catalog and discover template shares on X. Returns grokbot:// install links — there is no public install API.",
   "author": {
     "name": "David Stredansky",

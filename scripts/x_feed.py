@@ -6,7 +6,10 @@ Does not post. Does not call any marketplace install API.
 
 Auth: set X_BEARER_TOKEN (aliases: TWITTER_BEARER_TOKEN, X_API_BEARER_TOKEN).
 Optional local `.env` in the plugin root is loaded with stdlib only; existing
-process env wins.
+process env wins. Never logs or writes the token.
+
+Offline: ``--demo`` / ``X_DEMO=1`` (and missing-token fallback) reads
+``data/demo/x-search-recent.json``. ``--live`` requires a real token.
 """
 
 from __future__ import annotations
@@ -27,9 +30,11 @@ PLUGIN_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CATALOG_PATH = PLUGIN_ROOT / "data" / "catalog.json"
 DEFAULT_CHECKPOINT_PATH = PLUGIN_ROOT / "data" / "x-checkpoint.json"
 DEFAULT_ENV_PATH = PLUGIN_ROOT / ".env"
+DEFAULT_DEMO_PATH = PLUGIN_ROOT / "data" / "demo" / "x-search-recent.json"
+FIXTURE_DEMO_PATH = PLUGIN_ROOT / "tests" / "fixtures" / "x-search-recent.json"
 X_SEARCH_URL = "https://api.x.com/2/tweets/search/recent"
 USER_AGENT = (
-    "grok-bot-marketplace-plugin/0.2 "
+    "grok-bot-marketplace-plugin/0.3 "
     "(+https://github.com/dadoedo/grok-bot-marketplace-plugin)"
 )
 TOKEN_ENV_NAMES = (
@@ -37,6 +42,7 @@ TOKEN_ENV_NAMES = (
     "TWITTER_BEARER_TOKEN",
     "X_API_BEARER_TOKEN",
 )
+DEMO_TRUTHY = frozenset({"1", "true", "yes", "on"})
 # Recent search is the last ~7 days. Keep the default query under 512 chars.
 DEFAULT_DISCOVERY_QUERY = (
     '("x.ai/bot/marketplace" OR url:x.ai/bot OR '
@@ -47,6 +53,8 @@ SETUP_HINT = (
     "X search needs an app-only Bearer token from https://developer.x.com "
     "(Developer Console → your App → Keys and tokens). "
     "export X_BEARER_TOKEN='…' or copy .env.example to .env. "
+    "Without a token, x-* commands use the offline demo fixture "
+    "(pass --live to require credentials). "
     "Marketplace list/search/compare still work without X."
 )
 
@@ -54,8 +62,21 @@ MARKETPLACE_BOT_RE = re.compile(
     r"https?://(?:www\.)?x\.ai/bot/marketplace/bots/([A-Za-z0-9_-]+)",
     re.I,
 )
+MARKETPLACE_LISTING_RE = re.compile(
+    r"https?://(?:www\.)?x\.ai/bot/marketplace(?:/|\b|[?#])",
+    re.I,
+)
 GROKBOT_HREF_RE = re.compile(
     r"grokbot://app/v1/bot-template\?id=([A-Za-z0-9_-]+)",
+    re.I,
+)
+GROKBOT_URL_RE = re.compile(r"grokbot://[^\s)>\"]+", re.I)
+SHARE_TEMPLATE_RE = re.compile(
+    r"https?://(?:www\.)?(?:x\.ai|grok\.com)/(?:bot/)?(?:marketplace/)?(?:share|template|bot-template)[^\s)>\"]*",
+    re.I,
+)
+TEMPLATE_ID_QUERY_RE = re.compile(
+    r"(?:grokbot://[^\s]*|[?&])id=([A-Za-z0-9_-]+)",
     re.I,
 )
 URL_RE = re.compile(r"https?://[^\s)>\"]+", re.I)
@@ -107,17 +128,70 @@ def resolve_bearer_token(environ: dict[str, str] | None = None) -> str:
     )
 
 
-def auth_error_payload(message: str) -> dict[str, Any]:
+def auth_error_payload(message: str, *, demo_fallback: bool = False) -> dict[str, Any]:
     return {
         "error": message,
+        "demoFallback": demo_fallback,
         "setup": {
             "env": "X_BEARER_TOKEN",
             "aliases": list(TOKEN_ENV_NAMES[1:]),
             "hint": SETUP_HINT,
             "example": "cp .env.example .env  # then paste the token",
+            "portal": "https://developer.x.com",
+            "docs": "https://developer.x.com/en/docs/twitter-api/tweets/search/api-reference/get-tweets-search-recent",
+            "demo": "python3 scripts/catalog.py x-viral --demo --format json",
+            "live": "python3 scripts/catalog.py x-search --live --format json",
         },
         "marketplaceStillWorks": True,
+        "demo": {
+            "flag": "--demo",
+            "env": "X_DEMO=1",
+            "fixture": "data/demo/x-search-recent.json",
+        },
     }
+
+
+def demo_env_enabled(environ: dict[str, str] | None = None) -> bool:
+    env = environ if environ is not None else os.environ
+    return (env.get("X_DEMO") or "").strip().lower() in DEMO_TRUTHY
+
+
+def wants_demo(args: argparse.Namespace) -> bool:
+    if getattr(args, "live", False):
+        return False
+    if getattr(args, "demo", False):
+        return True
+    return demo_env_enabled()
+
+
+def resolve_demo_path(path: Path | None = None) -> Path:
+    if path and path.is_file():
+        return path
+    if DEFAULT_DEMO_PATH.is_file():
+        return DEFAULT_DEMO_PATH
+    if FIXTURE_DEMO_PATH.is_file():
+        return FIXTURE_DEMO_PATH
+    raise XFeedError(
+        "Demo fixture missing. Expected data/demo/x-search-recent.json "
+        "or tests/fixtures/x-search-recent.json."
+    )
+
+
+def load_demo_payload(path: Path | None = None) -> dict[str, Any]:
+    demo_path = resolve_demo_path(path)
+    try:
+        payload = json.loads(demo_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise XFeedError(f"Could not read demo fixture {demo_path}: {exc}") from exc
+    if not isinstance(payload, dict):
+        raise XFeedError(f"Demo fixture is not a JSON object: {demo_path}")
+    if not isinstance(payload.get("data"), list) and not isinstance(payload.get("results"), list):
+        raise XFeedError(f"Demo fixture needs data[] or results[]: {demo_path}")
+    try:
+        payload["_demoPath"] = str(demo_path.relative_to(PLUGIN_ROOT))
+    except ValueError:
+        payload["_demoPath"] = str(demo_path)
+    return payload
 
 
 def build_query(user_query: str | None) -> str:
@@ -239,6 +313,8 @@ def collect_urls(tweet: dict[str, Any]) -> list[str]:
 
     for match in URL_RE.findall(tweet.get("text") or ""):
         add(match)
+    for match in GROKBOT_URL_RE.findall(tweet.get("text") or ""):
+        add(match)
     for match in GROKBOT_HREF_RE.finditer(tweet.get("text") or ""):
         add(f"grokbot://app/v1/bot-template?id={match.group(1)}")
     entities = tweet.get("entities") or {}
@@ -260,28 +336,44 @@ def extract_bot_refs(urls: list[str], text: str) -> dict[str, list[str]]:
     add_hrefs: list[str] = []
     slugs: list[str] = []
     template_ids: list[str] = []
+    share_urls: list[str] = []
     blob = " ".join(urls) + " " + (text or "")
+
+    def add_unique(bucket: list[str], value: str) -> None:
+        value = value.rstrip(").,;\"'")
+        if value and value not in bucket:
+            bucket.append(value)
+
     for match in MARKETPLACE_BOT_RE.finditer(blob):
         slug = match.group(1)
         page = f"https://x.ai/bot/marketplace/bots/{slug}"
-        if page not in marketplace_urls:
-            marketplace_urls.append(page)
-        if slug not in slugs:
-            slugs.append(slug)
+        add_unique(marketplace_urls, page)
+        add_unique(slugs, slug)
     for url in urls:
-        if "x.ai/bot/marketplace" in url and url not in marketplace_urls:
-            marketplace_urls.append(url.split("?")[0])
+        lowered = url.lower()
+        if "x.ai/bot/marketplace" in lowered:
+            cleaned = url.split("?")[0].rstrip("/")
+            add_unique(marketplace_urls, cleaned)
+        if "grokbot://" in lowered:
+            add_unique(add_hrefs, url.split()[0])
+        if SHARE_TEMPLATE_RE.search(url) or "bot-template" in lowered:
+            add_unique(share_urls, url)
+    for match in MARKETPLACE_LISTING_RE.finditer(blob):
+        add_unique(marketplace_urls, "https://x.ai/bot/marketplace")
     for match in GROKBOT_HREF_RE.finditer(blob):
         href = f"grokbot://app/v1/bot-template?id={match.group(1)}"
-        if href not in add_hrefs:
-            add_hrefs.append(href)
-        if match.group(1) not in template_ids:
-            template_ids.append(match.group(1))
+        add_unique(add_hrefs, href)
+        add_unique(template_ids, match.group(1))
+    for match in TEMPLATE_ID_QUERY_RE.finditer(blob):
+        add_unique(template_ids, match.group(1))
+    for match in SHARE_TEMPLATE_RE.finditer(blob):
+        add_unique(share_urls, match.group(0).rstrip(").,;\"'"))
     return {
         "marketplaceUrls": marketplace_urls,
         "addHrefs": add_hrefs,
         "botSlugs": slugs,
         "templateIds": template_ids,
+        "shareUrls": share_urls,
     }
 
 
@@ -327,6 +419,8 @@ def normalize_post(tweet: dict[str, Any], users: dict[str, dict[str, Any]]) -> d
         "urls": urls,
         **refs,
         "matchedBots": [],
+        "feed": "x",
+        "source": "x",
     }
 
 
@@ -439,6 +533,44 @@ def search_posts(
     return posts, meta if isinstance(meta, dict) else {}
 
 
+def posts_from_demo_payload(payload: dict[str, Any]) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """Turn a checked-in X search JSON (or a results envelope) into posts."""
+    if isinstance(payload.get("results"), list) and payload.get("data") is None:
+        posts = []
+        for item in payload["results"]:
+            if not isinstance(item, dict):
+                continue
+            post = dict(item)
+            post.setdefault("feed", "x")
+            post.setdefault("source", "x")
+            post.setdefault("matchedBots", [])
+            posts.append(post)
+        meta = payload.get("meta") if isinstance(payload.get("meta"), dict) else {}
+        meta = dict(meta)
+        meta["demo"] = True
+        if payload.get("_demoPath"):
+            meta["fixture"] = payload["_demoPath"]
+        return posts, meta
+    users = _users_by_id(payload)
+    posts = [normalize_post(t, users) for t in payload.get("data") or [] if isinstance(t, dict)]
+    meta = payload.get("meta") if isinstance(payload.get("meta"), dict) else {}
+    meta = dict(meta)
+    meta["demo"] = True
+    if payload.get("_demoPath"):
+        meta["fixture"] = payload["_demoPath"]
+    return posts, meta
+
+
+def filter_demo_posts(posts: list[dict[str, Any]], user_query: str | None) -> list[dict[str, Any]]:
+    extra = (user_query or "").strip()
+    if not extra:
+        return posts
+    lowered = extra.lower()
+    if any(token in lowered for token in ("x.ai", "grokbot", "grok bot", "url:", " or ")):
+        return posts
+    return [p for p in posts if extra.lower() in (p.get("text") or "").lower()]
+
+
 def feed_envelope(
     *,
     posts: list[dict[str, Any]],
@@ -446,17 +578,23 @@ def feed_envelope(
     meta: dict[str, Any],
     extra: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
+    extra = extra or {}
     payload = {
-        "source": "x-api-v2-recent-search",
-        "mode": "x-feed",
+        "source": "x-demo-fixture" if extra.get("demo") else "x-api-v2-recent-search",
+        "feed": "x",
+        "mode": extra.get("mode") or "x-feed",
+        "demo": bool(extra.get("demo")),
+        "live": bool(extra.get("live")),
         "query": query,
+        "sort": extra.get("sort"),
         "fetchedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "resultCount": len(posts),
         "meta": {
             "newestId": meta.get("newest_id") or meta.get("newestId"),
             "oldestId": meta.get("oldest_id") or meta.get("oldestId"),
-            "resultCount": meta.get("result_count"),
+            "resultCount": meta.get("result_count") or meta.get("resultCount"),
             "sinceIdIgnored": bool(meta.get("sinceIdIgnored")),
+            "fixture": meta.get("fixture"),
         },
         "install": {
             "method": "grokbot-deeplink",
@@ -467,14 +605,24 @@ def feed_envelope(
         },
         "results": posts,
     }
+    skip = {"demo", "live", "mode", "sort"}
     if extra:
-        payload.update(extra)
+        for key, value in extra.items():
+            if key not in skip:
+                payload[key] = value
     return payload
 
 
 def print_text_feed(payload: dict[str, Any]) -> None:
-    print(f"Source: X recent search  query={payload.get('query')}")
-    print(f"Results: {payload.get('resultCount')}  (fetched {payload.get('fetchedAt')})")
+    mode = "demo" if payload.get("demo") else "live"
+    print(f"feed: x ({mode})")
+    print(f"Source: {payload.get('source')}  query={payload.get('query')}")
+    print(
+        f"Results: {payload.get('resultCount')}  sort={payload.get('sort') or '—'}  "
+        f"(fetched {payload.get('fetchedAt')})"
+    )
+    if payload.get("demo"):
+        print("Offline demo fixture — not live X. Set X_BEARER_TOKEN and pass --live for real search.")
     if payload.get("checkpoint"):
         print(f"Checkpoint: {payload['checkpoint']}")
     print("Install is a grokbot:// / marketplace URL — not an API.")
@@ -497,7 +645,7 @@ def print_text_feed(payload: dict[str, Any]) -> None:
             print(f"  marketplace: {url}")
         for bot in post.get("matchedBots") or []:
             print(
-                f"  matched: {bot.get('name')} — {bot.get('creator')}  "
+                f"  matched [marketplace]: {bot.get('name')} — {bot.get('creator')}  "
                 f"{bot.get('marketplaceUrl')}"
             )
         if not post.get("matchedBots"):
@@ -514,14 +662,46 @@ def emit(payload: dict[str, Any], fmt: str) -> None:
 
 
 def _run_search(args: argparse.Namespace, *, monitor: bool) -> int:
+    live = bool(getattr(args, "live", False))
+    demo = wants_demo(args)
+    token: str | None = None
     try:
         token = resolve_bearer_token()
     except XAuthError as exc:
-        json.dump(auth_error_payload(str(exc)), sys.stderr, indent=2)
+        if live:
+            json.dump(auth_error_payload(str(exc), demo_fallback=False), sys.stderr, indent=2)
+            sys.stderr.write("\n")
+            return 3
+        demo = True
+        json.dump(auth_error_payload(str(exc), demo_fallback=True), sys.stderr, indent=2)
         sys.stderr.write("\n")
-        return 3
+
     query = build_query(getattr(args, "query", None))
     checkpoint_path = Path(getattr(args, "checkpoint", None) or DEFAULT_CHECKPOINT_PATH)
+    sort = getattr(args, "sort", None) or ("recent" if monitor else "engagement")
+
+    if demo:
+        try:
+            raw = load_demo_payload()
+            posts, meta = posts_from_demo_payload(raw)
+            posts = filter_demo_posts(posts, getattr(args, "query", None))
+        except XFeedError as exc:
+            json.dump({"error": str(exc), "setup": {"hint": SETUP_HINT}}, sys.stderr, indent=2)
+            sys.stderr.write("\n")
+            return 2
+        posts = join_catalog(posts, Path(args.catalog))
+        posts = sort_posts(posts, sort)
+        extra: dict[str, Any] = {
+            "sinceIdUsed": None,
+            "demo": True,
+            "live": False,
+            "mode": "x-feed-demo",
+            "sort": sort,
+        }
+        emit(feed_envelope(posts=posts, query=query, meta=meta, extra=extra), args.format)
+        return 0
+
+    assert token is not None
     since_id = None
     if monitor and not getattr(args, "reset", False):
         since_id = getattr(args, "since_id", None) or load_checkpoint(checkpoint_path).get("sinceId")
@@ -535,7 +715,7 @@ def _run_search(args: argparse.Namespace, *, monitor: bool) -> int:
             since_id=since_id,
         )
     except XAuthError as exc:
-        json.dump(auth_error_payload(str(exc)), sys.stderr, indent=2)
+        json.dump(auth_error_payload(str(exc), demo_fallback=False), sys.stderr, indent=2)
         sys.stderr.write("\n")
         return 3
     except XFeedError as exc:
@@ -543,9 +723,14 @@ def _run_search(args: argparse.Namespace, *, monitor: bool) -> int:
         sys.stderr.write("\n")
         return 2
     posts = join_catalog(posts, Path(args.catalog))
-    sort = getattr(args, "sort", None) or ("recent" if monitor else "engagement")
     posts = sort_posts(posts, sort)
-    extra: dict[str, Any] = {"sinceIdUsed": since_id}
+    extra = {
+        "sinceIdUsed": since_id,
+        "demo": False,
+        "live": True,
+        "mode": "x-feed",
+        "sort": sort,
+    }
     newest = (meta.get("newest_id") or meta.get("newestId") or (posts[0]["id"] if posts else None))
     if monitor or getattr(args, "save_checkpoint", False):
         if newest:
@@ -562,6 +747,11 @@ def _run_search(args: argparse.Namespace, *, monitor: bool) -> int:
 
 
 def cmd_search(args: argparse.Namespace) -> int:
+    return _run_search(args, monitor=False)
+
+
+def cmd_viral(args: argparse.Namespace) -> int:
+    args.sort = "engagement"
     return _run_search(args, monitor=False)
 
 
@@ -599,6 +789,16 @@ def add_x_arguments(parser: argparse.ArgumentParser) -> None:
         action="store_true",
         help="Ignore existing checkpoint (monitor starts from latest window)",
     )
+    parser.add_argument(
+        "--demo",
+        action="store_true",
+        help="Use checked-in demo fixture (no network, no token required)",
+    )
+    parser.add_argument(
+        "--live",
+        action="store_true",
+        help="Force live X API. Fails with setup instructions if no Bearer token",
+    )
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -613,6 +813,14 @@ def build_parser() -> argparse.ArgumentParser:
     p_search = sub.add_parser("search", parents=[shared], help="Search recent X posts")
     add_x_arguments(p_search)
     p_search.set_defaults(func=cmd_search, sort="engagement")
+    p_viral = sub.add_parser(
+        "viral",
+        aliases=["trending"],
+        parents=[shared],
+        help="Same search ranked by engagement (viral / trending)",
+    )
+    add_x_arguments(p_viral)
+    p_viral.set_defaults(func=cmd_viral, sort="engagement")
     p_mon = sub.add_parser("monitor", parents=[shared], help="Fetch posts newer than the checkpoint")
     add_x_arguments(p_mon)
     p_mon.set_defaults(func=cmd_monitor, sort="recent")

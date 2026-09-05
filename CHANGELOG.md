@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.0
+
+- Offline X feed: `--demo` / `X_DEMO=1` / missing-token fallback against `data/demo/x-search-recent.json`
+- `--live` requires `X_BEARER_TOKEN` and never falls back to fixtures
+- `x-viral` / `x-trending` rank by engagement
+- Label envelopes and cards `feed: marketplace` vs `feed: x`
+- Broader share URL detection (listing URL, grokbot://, bot-template / share links)
+- Demo runs do not write the X checkpoint; tokens stay in env only
+
 ## 0.2.0
 
 - X discovery feed: `x-search` and `x-monitor` via official X API v2 recent search (`X_BEARER_TOKEN`)

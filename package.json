@@ -1,6 +1,6 @@
 {
   "name": "grok-bot-marketplace-plugin",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "description": "Cursor community Open Plugin: Grok Bot marketplace catalog plus X discovery feed.",
   "license": "MIT",
@@ -21,6 +21,7 @@
   "scripts": {
     "refresh": "python3 scripts/catalog.py refresh",
     "x-search": "python3 scripts/catalog.py x-search",
+    "x-viral": "python3 scripts/catalog.py x-viral",
     "test": "python3 -m unittest discover -s tests -v"
   },
   "engines": {
