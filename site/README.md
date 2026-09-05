@@ -2,56 +2,62 @@
 
 Static marketing page for the **Grok Bot Marketplace Plugin**.
 
-Working title **XBots** is temporary (domain TBD; `xbots.io` is taken). Swap-friendly: search `data-brand`, `.brand-name`, and the `BRAND SWAP` comment in `index.html` / `styles.css`.
+Working title **XBots** / **xbots.so** is temporary (`xbots.io` is taken). Swap-friendly: search `data-brand`, `.brand-name`, `.brand-domain` in `index.html` / `styles.css`.
 
 This is a discovery Open Plugin landing page — **not** an installer and **not** an official x.ai product.
 
-## Preview locally
+## Visual system (mirrors Grok Bot marketplace)
 
-From the repo root:
+Do **not** restyle this as generic neon SaaS / glassmorphism. Chrome and cards follow [the public marketplace](https://x.ai/bot/marketplace):
+
+- Dark charcoal page, clean sans (Inter), category chips, an **Add** control
+- Bot cards use real catalog fields: `name`, `creatorName`, `summary`, `color`, `shape`, `imageUrl` (S3 creator assets on `grok-bot-marketplace-public-assets.s3.amazonaws.com`)
+- Avatars are clipped to marketplace **shapes** (`squircle`, `hex`, `pebble`, `teardrop`, `blob`, `tablet`, `cloud`, `wedge`, `dome`, `crystal`, `capsule`, …) via CSS `clip-path` / `border-radius`
+- Glow/tint uses the bot’s `color` token (`green`, `violet`, `magenta`, `orange`, `blue`, `cyan`, `gray`, `red`, `black`, `brown`, `yellow`)
+- **Catalog avatars win** over generated hero/OG art if they conflict
+- Add points at `addHref` (`grokbot://…`) and the name/card at `marketplaceUrl` — never a fake install API
+
+Data: `site/catalog.json` (slim copy of `data/catalog.json`). Refresh with:
 
 ```bash
+python3 scripts/sync-site-catalog.py
+```
+
+The page also tries `../data/catalog.json` if you serve the **repo root**.
+
+## Preview locally
+
+```bash
+python3 scripts/sync-site-catalog.py
 python3 -m http.server 8080 --directory site
 ```
 
 Open http://127.0.0.1:8080/
 
-No build step. Vanilla HTML + CSS. Fonts load from Google Fonts.
+No build step. Vanilla HTML + CSS + `app.js`.
 
 ## GitHub Pages
 
-GitHub’s **Deploy from a branch** UI only offers:
+GitHub’s **Deploy from a branch** UI only offers `/` or `/docs` — not `/site`. Use Actions (`.github/workflows/pages.yml`):
 
-- `/` (repo root) — would mix the plugin tree into the site
-- `/docs` — not used here; the site lives in `site/`
+1. **Settings → Pages → Source: GitHub Actions**
+2. Merge to `main` (or **workflow_dispatch**)
+3. The workflow runs `sync-site-catalog.py` then uploads `site/`
 
-**`/site` is not a folder GitHub will serve from that dropdown.** Use Actions instead (workflow shipped at `.github/workflows/pages.yml`):
-
-1. Repo **Settings → Pages**
-2. **Source:** GitHub Actions
-3. Merge to `main` (or run the workflow manually with **workflow_dispatch**)
-4. The Action uploads the `site/` folder
-
-Expected URL: `https://dadoedo.github.io/grok-bot-marketplace-plugin/`
-
-Optional fallback if you refuse Actions: copy `site/*` into `docs/` and set Pages to **Deploy from branch → `/docs`**. Keep one source of truth — do not fork the markup in two folders.
+Expected URL: `https://dadoedo.github.io/grok-bot-marketplace-plugin/`  
+Placeholder domain: `xbots.so`
 
 ## Brand / asset slots
 
 | Token | Current |
 | --- | --- |
 | Short name | `XBots` |
-| Status | working title |
-| Full name | Grok Bot Marketplace Plugin |
+| Domain | `xbots.so` (placeholder) |
+| Mark | `assets/brand-icon.png` (secondary; catalog faces lead the hero) |
 
-When generated art arrives, drop files named in [`assets/README.md`](assets/README.md):
-
-- `assets/hero.png` (1600×900) — replace the CSS collage
-- `assets/og.png` (1200×630 PNG) — then retarget `og:image` in `index.html`
+Optional later drops — see [`assets/README.md`](assets/README.md). Do not replace the catalog grid with invented Synth/Nova characters.
 
 ## Honesty (do not water down)
-
-Copy on this page must keep:
 
 - Discovery / browse only
 - Install = `grokbot://` addHref or marketplace URL

@@ -2,7 +2,8 @@
 
 ## 0.3.1
 
-- Static landing site in `site/` (GitHub Pages via Actions). Working title XBots is temporary.
+- Static landing site in `site/` (GitHub Pages via Actions). Working title XBots / xbots.so.
+- Landing cards use live marketplace catalog fields (shape, color, S3 avatars) — not invented characters.
 
 ## 0.3.0
 

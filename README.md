@@ -49,7 +49,7 @@ Example (truncated):
 
 Python 3.10+. Stdlib only — no pip packages.
 
-Marketing page (GitHub Pages): [`site/`](site/) — working title **XBots** (temporary). Preview with `python3 -m http.server 8080 --directory site`. Enable Pages via GitHub Actions (see [`site/README.md`](site/README.md)); the branch UI cannot serve `/site`.
+Marketing page (GitHub Pages): [`site/`](site/) — working title **XBots** / **xbots.so**. Visuals follow Grok Bot marketplace shape/color/avatar conventions and load `catalog.json`. Preview: `python3 -m http.server 8080 --directory site`. Pages: GitHub Actions (see [`site/README.md`](site/README.md)).
 
 ## Two feeds
 

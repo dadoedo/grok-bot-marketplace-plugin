@@ -1,269 +1,203 @@
 <!DOCTYPE html>
-<html lang="en" data-brand="XBots" data-brand-status="temporary">
+<html lang="en" data-brand="XBots" data-brand-domain="xbots.so" data-brand-status="temporary">
   <head>
     <!--
-      BRAND SWAP — working title "XBots" is TEMPORARY (domain TBD; xbots.io is taken).
-      Search this file for: data-brand, brand-name, og:title, twitter:title
-      Full product name stays "Grok Bot Marketplace Plugin" until a domain is chosen.
+      BRAND SWAP — working title "XBots" / xbots.so is TEMPORARY.
+      Search: data-brand, brand-name, brand-domain, og:title
+      Visuals follow Grok Bot marketplace shape/color/avatar conventions.
+      Catalog avatars from data/catalog.json win over generated hero art.
     -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>XBots — Grok Bot marketplace + X discovery plugin</title>
+    <title>XBots — Find your next AI teammate</title>
     <meta
       name="description"
-      content="Cursor Open Plugin to browse the public Grok Bot marketplace catalog and viral template shares on X. Discovery only — not an installer, not an official x.ai product."
+      content="XBots is a Cursor Open Plugin for discovering Grok Bots: the official marketplace catalog plus viral template shares on X. Discovery only — not an installer."
     />
-    <meta name="theme-color" content="#08080a" />
-    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
-    <link rel="canonical" href="https://dadoedo.github.io/grok-bot-marketplace-plugin/" />
+    <meta name="theme-color" content="#0b0b0c" />
+    <link rel="icon" href="./assets/brand-icon.png" type="image/png" />
+    <link rel="canonical" href="https://xbots.so/" />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="XBots" />
-    <meta property="og:title" content="XBots — two feeds, zero fake install APIs" />
+    <meta property="og:title" content="XBots — Find your next AI teammate" />
     <meta
       property="og:description"
-      content="Browse official Grok Bot marketplace listings and viral grokbot:// shares on X. Cursor Open Plugin. Discovery only."
+      content="Browse the Grok Bot marketplace catalog and viral grokbot:// shares on X. Cursor discovery plugin — not an installer."
     />
-    <!-- When CoS drops 1200×630 PNG, change this href to ./assets/og.png -->
-    <meta property="og:image" content="./assets/og-slot.svg" />
-    <meta property="og:image:alt" content="XBots: marketplace catalog plus X viral feed" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="XBots — Grok Bot marketplace + X discovery" />
+    <meta property="og:image" content="./assets/brand-icon.png" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="XBots — Find your next AI teammate" />
     <meta
       name="twitter:description"
-      content="Two discovery feeds for Grok Bots. Install is still a grokbot:// link — never an API."
+      content="Marketplace catalog + X viral feed for Grok Bots. Install is still a grokbot:// link."
     />
-    <meta name="twitter:image" content="./assets/og-slot.svg" />
+    <meta name="twitter:image" content="./assets/brand-icon.png" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
-    <div class="atmosphere" aria-hidden="true"></div>
-    <div class="content">
-      <header class="wrap">
-        <nav class="nav" aria-label="Primary">
-          <a class="brand" href="#top">
-            <img src="./assets/mark.svg" width="40" height="40" alt="" />
-            <span class="brand-lockup">
-              <span class="brand-name">XBots</span>
-              <span class="brand-tag">working title</span>
-            </span>
-          </a>
-          <div class="nav-links">
-            <a href="#features">Features</a>
-            <a href="#how">How it works</a>
-            <a href="#cli">CLI</a>
-            <a href="#setup">X setup</a>
-            <a href="https://github.com/dadoedo/grok-bot-marketplace-plugin">GitHub</a>
-          </div>
-        </nav>
-        <p class="honesty-bar">
-          <strong>Honesty</strong>
-          <span>
-            Discovery plugin for Cursor — not an installer, not a store, not an official
-            x.ai or Cursor product. Bot install is still a <code>grokbot://</code> link.
+    <header class="wrap">
+      <nav class="nav" aria-label="Primary">
+        <a class="brand" href="#top">
+          <img class="brand-icon" src="./assets/brand-icon.png" width="36" height="36" alt="" />
+          <span class="brand-lockup">
+            <span class="brand-name">XBots</span>
+            <span class="brand-domain">xbots.so · working title</span>
           </span>
-        </p>
-      </header>
+        </a>
+        <div class="nav-links">
+          <a href="#browse">Browse</a>
+          <a href="#how">How it works</a>
+          <a href="#cli">CLI</a>
+          <a href="#setup">X setup</a>
+          <a href="https://github.com/dadoedo/grok-bot-marketplace-plugin">GitHub</a>
+        </div>
+      </nav>
+      <p class="note">
+        <strong>Discovery plugin</strong> for Cursor agents — not an installer, not a store,
+        not an official x.ai or Cursor product. Add still means a
+        <code>grokbot://</code> deep link or the marketplace URL.
+      </p>
+    </header>
 
-      <main id="main">
-        <section class="wrap hero" id="top">
-          <div>
-            <p class="kicker">Cursor Open Plugin · Grok Bot Marketplace Plugin</p>
-            <h1>Two feeds.<br />Zero fake APIs.</h1>
-            <p class="lede">
-              Browse the public Grok Bot catalog on x.ai, then watch which templates
-              actually get shared on X. Agents get structured cards. You open the deep
-              link. Nothing pretends to install a bot.
+    <main id="main">
+      <section class="wrap hero" id="top">
+        <div>
+          <h1>Find your next AI teammate.</h1>
+          <p class="lede">
+            XBots lets Cursor agents browse the public Grok Bot marketplace and the
+            templates people actually share on X. Same catalog faces and shapes you
+            already know. You still open Add yourself.
+          </p>
+          <div class="cta-row">
+            <a class="btn btn-solid" href="https://github.com/dadoedo/grok-bot-marketplace-plugin"
+              >View the repo</a
+            >
+            <a class="btn btn-ghost" href="https://cursor.directory">Install via cursor.directory</a>
+          </div>
+          <p class="note">
+            Directory listing ships after publish. Until then, clone or symlink the repo
+            as a local Cursor plugin. Placeholder domain <span class="brand-domain">xbots.so</span>.
+          </p>
+        </div>
+        <div>
+          <div class="hero-grid" id="featured" aria-label="Featured Grok Bots from the marketplace catalog"></div>
+        </div>
+      </section>
+
+      <div class="wrap stats" id="stats">69 public Bots</div>
+
+      <section class="wrap" id="browse">
+        <div class="section-head">
+          <h2>Browse Bots</h2>
+          <p class="kicker">Live fields from catalog.json · shape, color, creator image</p>
+        </div>
+        <div class="chips" id="chips" aria-label="Categories"></div>
+        <p class="status" id="browse-status">Loading marketplace catalog…</p>
+        <div class="bot-grid" id="browse-grid"></div>
+      </section>
+
+      <section class="wrap" id="how">
+        <div class="section-head">
+          <h2>How XBots works</h2>
+          <p class="kicker">Two feeds · zero fake APIs</p>
+        </div>
+        <div class="steps">
+          <article class="step">
+            <div class="num">01</div>
+            <h3>Marketplace catalog</h3>
+            <p>
+              List, search, and compare the public SSR catalog at x.ai/bot/marketplace.
+              Cards keep <code>name</code>, <code>creatorName</code>, <code>summary</code>,
+              <code>color</code>, <code>shape</code>, and S3 <code>imageUrl</code>.
             </p>
-            <div class="cta-row">
-              <a class="btn btn-gold" href="https://github.com/dadoedo/grok-bot-marketplace-plugin"
-                >View the repo</a
-              >
-              <a class="btn btn-ghost" href="https://cursor.directory"
-                >Install via cursor.directory</a
-              >
-            </div>
-            <p class="lede" style="margin-top: -0.6rem; font-size: 0.92rem; color: var(--mute)">
-              Directory install goes live after this repo is submitted to
-              <a href="https://cursor.directory/plugins/new">cursor.directory/plugins/new</a>.
-              Until then, clone the GitHub repo or symlink it as a local plugin.
+          </article>
+          <article class="step">
+            <div class="num">02</div>
+            <h3>X viral feed</h3>
+            <p>
+              Recent search for marketplace URLs and <code>grokbot://</code> shares.
+              <code>--demo</code> works offline. Live search uses your Bearer token.
             </p>
-            <div class="feed-pills" aria-label="Discovery feeds">
-              <span class="pill pill-m">feed: marketplace</span>
-              <span class="pill pill-x">feed: x · --demo works offline</span>
-            </div>
-          </div>
-          <div class="hero-art" data-slot="hero">
-            <!-- SLOT: replace collage with <img class="hero-photo" src="./assets/hero.png" alt="…"> when art arrives -->
-            <div class="collage" aria-hidden="true">
-              <article class="card marketplace">
-                <p class="meta" style="color: var(--brass)">feed: marketplace</p>
-                <h3>Researchy</h3>
-                <p>Farzad · Engineering · snapshot card</p>
-                <p class="code-line">grokbot://app/v1/bot-template?id=…</p>
-              </article>
-              <article class="card xfeed">
-                <p class="meta" style="color: var(--signal)">feed: x · demo</p>
-                <h3>@viralshare</h3>
-                <p>Marketplace link + grokbot:// in the post. Ranked by engagement.</p>
-                <p class="code-line">python3 scripts/catalog.py x-viral --demo</p>
-              </article>
-            </div>
-          </div>
-        </section>
+          </article>
+          <article class="step">
+            <div class="num">03</div>
+            <h3>You tap Add</h3>
+            <p>
+              Agents return <code>addHref</code> and <code>marketplaceUrl</code>. There is
+              no install API. Open the deep link in Grok Bot, or the marketplace page.
+            </p>
+          </article>
+        </div>
+      </section>
 
-        <section class="wrap" id="features">
-          <div class="section-head">
-            <h2>What you actually get</h2>
-            <p class="section-kicker">No partnership claims · MIT</p>
-          </div>
-          <div class="bento">
-            <article class="tile wide">
-              <h3><span class="dot dot-m"></span>Official marketplace catalog</h3>
-              <p>
-                List, search, compare, and refresh from the public SSR page at
-                x.ai/bot/marketplace plus a checked-in <code>data/catalog.json</code>.
-                Every card returns <code>name</code>, <code>creator</code>,
-                <code>description</code>, <code>categories</code>,
-                <code>addHref</code>, and <code>marketplaceUrl</code>.
-              </p>
-            </article>
-            <article class="tile">
-              <h3><span class="dot dot-x"></span>X viral feed</h3>
-              <p>
-                Recent search for marketplace URLs, listing links, and
-                <code>grokbot://</code> shares. <code>x-viral</code> ranks by engagement.
-              </p>
-            </article>
-            <article class="tile tall">
-              <h3>Offline demo before the key lands</h3>
-              <p>
-                <code>--demo</code> or <code>X_DEMO=1</code> reads a fixture. Missing
-                Bearer token falls back the same way. CI never needs X credentials.
-              </p>
-            </article>
-            <article class="tile tall">
-              <h3>Secrets stay in env</h3>
-              <p>
-                App-only <code>X_BEARER_TOKEN</code> (or
-                <code>TWITTER_BEARER_TOKEN</code>) from the environment or a gitignored
-                <code>.env</code>. Tokens are never logged or written to the catalog.
-              </p>
-            </article>
-            <article class="tile wide">
-              <h3>Install is a link. Full stop.</h3>
-              <p>
-                There is no public Bot marketplace REST API. This plugin will not invent
-                one. Open <code>addHref</code> in Grok Bot, or open the marketplace URL
-                in a browser.
-              </p>
-            </article>
-          </div>
-        </section>
+      <section class="wrap" id="cli">
+        <div class="section-head">
+          <h2>CLI for agents</h2>
+          <p class="kicker">skills/grok-bot-marketplace · skills/grok-bot-x-feed</p>
+        </div>
+        <div class="terminal">
+          <div class="terminal-bar">plugin root</div>
+          <pre><span class="comment"># Official catalog</span>
+python3 scripts/catalog.py search "outbound" --format text
+python3 scripts/catalog.py compare researchy tinkabot
 
-        <section class="wrap" id="how">
-          <div class="section-head">
-            <h2>How it works</h2>
-            <p class="section-kicker">Three steps · no backend of ours</p>
-          </div>
-          <div class="steps">
-            <article class="step">
-              <div class="num">01</div>
-              <h3>Snapshot the catalog</h3>
-              <p>
-                Parse the public marketplace HTML. Skills and CLI read
-                <code>data/catalog.json</code> offline. Refresh when you ask.
-              </p>
-            </article>
-            <article class="step">
-              <div class="num">02</div>
-              <h3>Watch X for shares</h3>
-              <p>
-                Live: X API v2 recent search with your Bearer token. Otherwise the demo
-                fixture. Hits join to catalog cards when a slug matches.
-              </p>
-            </article>
-            <article class="step">
-              <div class="num">03</div>
-              <h3>You open the deep link</h3>
-              <p>
-                Agents return <code>grokbot://app/v1/bot-template?id=…</code> plus the
-                x.ai bot page. You install. The plugin does not.
-              </p>
-            </article>
-          </div>
-        </section>
+<span class="comment"># X feed — fixture, no key</span>
+python3 scripts/catalog.py x-viral --demo --format text
 
-        <section class="wrap" id="cli">
-          <div class="section-head">
-            <h2>CLI &amp; agent skills</h2>
-            <p class="section-kicker">stdlib Python · skills in-repo</p>
-          </div>
-          <div class="terminal" role="region" aria-label="Example commands">
-            <div class="terminal-bar">
-              <span class="traffic"></span><span class="traffic"></span><span class="traffic"></span>
-              <span>plugin root · json default, --format text after the subcommand</span>
-            </div>
-            <pre><span class="comment"># Marketplace (no X token)</span>
-<span class="prompt">$</span> python3 scripts/catalog.py search "outbound" --format text
-<span class="prompt">$</span> python3 scripts/catalog.py compare researchy tinkabot
+<span class="comment"># Live recent search</span>
+python3 scripts/catalog.py x-search --live --format text</pre>
+        </div>
+      </section>
 
-<span class="comment"># X feed — works today without credentials</span>
-<span class="prompt">$</span> python3 scripts/catalog.py x-viral --demo --format text
-
-<span class="comment"># Live, once X_BEARER_TOKEN is exported</span>
-<span class="prompt">$</span> python3 scripts/catalog.py x-search --live --format text</pre>
-          </div>
-        </section>
-
-        <section class="wrap" id="setup">
-          <div class="section-head">
-            <h2>X Bearer, when you have it</h2>
-            <p class="section-kicker">App-only · recent search · ~7 days</p>
-          </div>
-          <div class="setup-grid">
-            <ol class="setup">
-              <li>Create a Project + App at <a href="https://developer.x.com">developer.x.com</a>.</li>
-              <li>Copy the <strong>Bearer Token</strong> (not the API key/secret).</li>
-              <li><code>cp .env.example .env</code> and paste <code>X_BEARER_TOKEN=</code> — never commit <code>.env</code>.</li>
-              <li>Run <code>x-search --live</code> or <code>x-viral --live</code>.</li>
-            </ol>
-            <div class="env" aria-label="Environment variable names">
-              X_BEARER_TOKEN=<span style="color: var(--mute)">your-token</span><br />
-              <span style="color: var(--mute)"># aliases: TWITTER_BEARER_TOKEN, X_API_BEARER_TOKEN</span><br />
-              X_DEMO=1
-            </div>
-          </div>
-        </section>
-      </main>
-
-      <footer class="wrap">
-        <div class="foot-row">
-          <div>
-            <p class="brand-name" style="margin: 0 0 0.3rem">XBots</p>
-            <p style="margin: 0">Grok Bot Marketplace Plugin · MIT License</p>
-          </div>
-          <div class="foot-links">
-            <a href="https://github.com/dadoedo/grok-bot-marketplace-plugin">GitHub</a>
-            <a href="https://x.ai/bot/marketplace">Grok Bot marketplace</a>
-            <a href="https://cursor.directory">cursor.directory</a>
-            <a href="https://github.com/dadoedo/grok-bot-marketplace-plugin/blob/main/LICENSE">License</a>
+      <section class="wrap" id="setup">
+        <div class="section-head">
+          <h2>X setup</h2>
+          <p class="kicker">App-only Bearer · never committed</p>
+        </div>
+        <div class="setup-grid">
+          <ol class="setup">
+            <li>Create a Project + App at <a href="https://developer.x.com">developer.x.com</a>.</li>
+            <li>Copy the Bearer Token (not the API key).</li>
+            <li><code>cp .env.example .env</code> and set <code>X_BEARER_TOKEN</code>.</li>
+            <li><code>python3 scripts/catalog.py x-viral --live</code></li>
+          </ol>
+          <div class="env">
+            X_BEARER_TOKEN=<br />
+            TWITTER_BEARER_TOKEN=<br />
+            X_DEMO=1
           </div>
         </div>
-        <p class="legal">
-          Independent open-source tool. Not affiliated with, endorsed by, or partnered
-          with xAI or Cursor. Working title <span class="brand-name">XBots</span> is
-          temporary while a domain is chosen. Discovery only — we do not install bots.
-        </p>
-      </footer>
-    </div>
+      </section>
+    </main>
+
+    <footer class="wrap">
+      <div class="foot-row">
+        <div>
+          <strong class="brand-name">XBots</strong>
+          <div>xbots.so · Grok Bot Marketplace Plugin · MIT</div>
+        </div>
+        <div class="foot-links">
+          <a href="https://github.com/dadoedo/grok-bot-marketplace-plugin">GitHub</a>
+          <a href="https://x.ai/bot/marketplace">Grok Bot marketplace</a>
+          <a href="https://cursor.directory">cursor.directory</a>
+          <a href="https://github.com/dadoedo/grok-bot-marketplace-plugin/blob/main/LICENSE">License</a>
+        </div>
+      </div>
+      <p class="legal">
+        Independent open-source discovery tool. Not affiliated with xAI or Cursor.
+        Avatars, names, shapes, and colors come from the public marketplace catalog.
+        Working title XBots / xbots.so is temporary. We do not install bots.
+      </p>
+    </footer>
+    <script src="./app.js" type="module"></script>
   </body>
 </html>
