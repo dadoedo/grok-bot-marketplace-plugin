@@ -1,13 +1,17 @@
 # Site assets
 
+Working brand is **XBots** (`xbots.so`). Chrome uses `logo.png`. The **hero is live marketplace cards** from `catalog.json` (real S3 `imageUrl` + SVG shape masks) — not `hero.png`.
+
 | File | Use |
 | --- | --- |
-| **`logo.png`** | Header, favicon — XBots mark (cyan→violet X with antenna) |
-| **`hero.png`** | Hero dual-feed illustration |
-| **`og.png`** | Open Graph / Twitter `summary_large_image` |
-| `catalog.json` | Slim marketplace catalog for Browse / featured faces |
-| `brand-icon.png` | Earlier squircle icon (superseded by `logo.png` in chrome) |
+| `logo.png` | Header / favicon lockup |
+| `hero.png` | Optional share fallback (marketplace collage of real catalog faces) |
+| `og.png` | Open Graph / Twitter `summary_large_image` (real catalog faces) |
+| `shapes/*.svg` | CSS `mask-image` for marketplace avatar shapes |
+| `logo-marketplace.png` | Prefer in header if present (not in repo yet) |
+| `hero-marketplace.png` | Prefer if present (not in repo yet) |
+| `marketplace-avatars/` | Prefer if present (not in repo yet) |
 
-Browse-grid faces still come from catalog `imageUrl` (S3), clipped to marketplace `shape` / `color`. Hero illustration is brand packaging; it does not replace those cards with invented Synth/Nova characters.
+Browse-grid and hero faces come from catalog `imageUrl` (S3), masked to marketplace `shape` on `color` fields. Do not invent Synth/Nova characters.
 
 Copy bank: [`../marketing-copy.md`](../marketing-copy.md).

@@ -4,20 +4,19 @@ Static marketing page for the **Grok Bot Marketplace Plugin**.
 
 Working title **XBots** / **xbots.so** is temporary (`xbots.io` is taken — do not claim it). Swap-friendly: search `data-brand`, `.brand-name`, `.brand-domain` in `index.html` / `styles.css`. Copy bank: [`marketing-copy.md`](marketing-copy.md).
 
-Brand files in [`assets/`](assets/): `logo.png`, `hero.png`, `og.png`.
-
 This is a discovery Open Plugin landing page — **not** an installer and **not** an official x.ai product.
 
 ## Visual system (mirrors Grok Bot marketplace)
 
-Do **not** restyle this as generic neon SaaS / glassmorphism. Chrome and cards follow [the public marketplace](https://x.ai/bot/marketplace):
+Do **not** restyle this as generic neon SaaS. Chrome and cards follow [the public marketplace](https://x.ai/bot/marketplace):
 
-- Dark charcoal page, clean sans (Inter), category chips, an **Add** control
+- Ivory page, jet type (Inter), category chips, an **Add** control
+- Hero is a **live catalog gallery** (not `hero.png`). Featured tiles come from `catalog.json`
 - Bot cards use real catalog fields: `name`, `creatorName`, `summary`, `color`, `shape`, `imageUrl` (S3 creator assets on `grok-bot-marketplace-public-assets.s3.amazonaws.com`)
-- Avatars are clipped to marketplace **shapes** (`squircle`, `hex`, `pebble`, `teardrop`, `blob`, `tablet`, `cloud`, `wedge`, `dome`, `crystal`, `capsule`, …) via CSS `clip-path` / `border-radius`
-- Glow/tint uses the bot’s `color` token (`green`, `violet`, `magenta`, `orange`, `blue`, `cyan`, `gray`, `red`, `black`, `brown`, `yellow`)
-- **Catalog avatars win** over generated hero/OG art if they conflict
-- Add points at `addHref` (`grokbot://…`) and the name/card at `marketplaceUrl` — never a fake install API
+- Avatars are clipped with CSS `mask-image` + SVG shapes in `assets/shapes/` (`squircle`, `hex`, `pebble`, `teardrop`, `blob`, `tablet`, `cloud`, `wedge`, `dome`, `crystal`, `capsule`, …)
+- Color fields use x.ai brand-200 hues (`green`, `violet`, `magenta`, `orange`, `blue`, `cyan`, `gray`, `red`, `black`, `brown`, `yellow`)
+- **Do not invent faces.** Catalog `imageUrl` only
+- Add points at `addHref` (`grokbot://…`) and the name/portrait at `marketplaceUrl`
 
 Data: `site/catalog.json` (slim copy of `data/catalog.json`). Refresh with:
 
@@ -55,9 +54,9 @@ Placeholder domain: `xbots.so`
 | --- | --- |
 | Short name | `XBots` |
 | Domain | `xbots.so` (placeholder) |
-| Mark | `assets/logo.png` |
-| Hero | `assets/hero.png` |
-| OG | `assets/og.png` |
+| Mark | `assets/logo.png` (prefer `logo-marketplace.png` if added later) |
+| Hero | live `#featured` catalog cards — `hero.png` is not the landing hero |
+| OG | `assets/og.png` (real catalog faces on color fields) |
 
 ## Honesty (do not water down)
 

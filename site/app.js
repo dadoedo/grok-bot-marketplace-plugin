@@ -1,5 +1,4 @@
-/* Landing page catalog renderer. Prefers ./catalog.json (Pages + site server),
-   then ../data/catalog.json when the repo root is served. */
+/* Landing page catalog renderer. Prefers ./catalog.json, then ../data/catalog.json. */
 
 const CATALOG_URLS = ["./catalog.json", "../data/catalog.json"];
 const FEATURED_IDS = [
@@ -31,42 +30,32 @@ function colorClass(color) {
   return `color-${key}`;
 }
 
-function avatarHtml(bot, size) {
+function avatarHtml(bot) {
   const src = escapeHtml(bot.imageUrl || "");
   const alt = escapeHtml(`${bot.name} by ${bot.creatorName || "unknown"}`);
-  const sizeClass = size || "";
-  return `<div class="avatar-glow ${colorClass(bot.color)}">
-    <div class="avatar ${sizeClass} ${shapeClass(bot.shape)} ${colorClass(bot.color)}">
-      <img src="${src}" alt="${alt}" width="88" height="88" loading="lazy" />
-    </div>
-  </div>`;
+  return `<div class="avatar ${shapeClass(bot.shape)}" title="${escapeHtml(bot.shape)} · ${escapeHtml(bot.color)}">
+      <img src="${src}" alt="${alt}" width="240" height="240" loading="lazy" decoding="async" />
+    </div>`;
 }
 
-function featuredCard(bot) {
-  const href = escapeHtml(bot.marketplaceUrl || "#");
-  return `<a class="mini-card" href="${href}">
-    ${avatarHtml(bot, "lg")}
-    <span class="label">${escapeHtml(bot.name)}</span>
-  </a>`;
-}
-
-function browseCard(bot) {
+function galleryCard(bot, compact) {
   const market = escapeHtml(bot.marketplaceUrl || "#");
   const add = escapeHtml(bot.addHref || bot.marketplaceUrl || "#");
-  const cats = (bot.categories || [])
-    .map((c) => `<span>${escapeHtml(c)}</span>`)
-    .join("");
+  const cats = (bot.categories || []).slice(0, compact ? 1 : 2);
+  const catHtml = cats.map((c) => `<span>${escapeHtml(c)}</span>`).join("");
   const summary = escapeHtml(bot.summary || bot.description || "");
   const creator = escapeHtml(bot.creatorName || "");
-  const handle = bot.handle ? ` @${escapeHtml(bot.handle)}` : "";
-  return `<article class="bot-card">
-    ${avatarHtml(bot)}
-    <div>
-      <h3><a href="${market}">${escapeHtml(bot.name)}</a></h3>
-      <p class="byline">by ${creator}${handle}</p>
-      <p class="summary">${summary}</p>
-      <div class="card-cats">${cats}</div>
-    </div>
+  const extra = compact
+    ? `<div class="card-cats">${catHtml}</div>`
+    : `<p class="summary">${summary}</p>
+       <div class="card-cats">${catHtml}</div>`;
+  return `<article class="gallery-card ${colorClass(bot.color)}">
+    <a class="portrait" href="${market}" aria-label="${escapeHtml(bot.name)} on the marketplace">
+      ${avatarHtml(bot)}
+    </a>
+    <h3><a href="${market}">${escapeHtml(bot.name)}</a></h3>
+    <p class="byline">by ${creator}</p>
+    ${extra}
     <a class="add" href="${add}" title="Open grokbot:// addHref (or marketplace URL)">Add</a>
   </article>`;
 }
@@ -99,7 +88,9 @@ function renderFeatured(bots) {
   while (featured.length < 8 && extras.length) {
     featured.push(extras.shift());
   }
-  document.getElementById("featured").innerHTML = featured.map(featuredCard).join("");
+  document.getElementById("featured").innerHTML = featured
+    .map((bot) => galleryCard(bot, true))
+    .join("");
 }
 
 function uniqueCreators(bots) {
@@ -108,7 +99,8 @@ function uniqueCreators(bots) {
 
 function renderStats(doc) {
   const bots = doc.bots || [];
-  const cats = (doc.categories || []).length || new Set(bots.flatMap((b) => b.categories || [])).size;
+  const cats =
+    (doc.categories || []).length || new Set(bots.flatMap((b) => b.categories || [])).size;
   document.getElementById("stats").textContent =
     `${doc.botCount || bots.length} Bots · ${uniqueCreators(bots)} creators · ${cats} categories`;
 }
@@ -132,7 +124,9 @@ function renderBrowse(bots, category) {
     !category || category === "All"
       ? bots
       : bots.filter((b) => (b.categories || []).includes(category));
-  document.getElementById("browse-grid").innerHTML = filtered.map(browseCard).join("");
+  document.getElementById("browse-grid").innerHTML = filtered
+    .map((bot) => galleryCard(bot, false))
+    .join("");
   document.getElementById("browse-status").textContent =
     `${filtered.length} bot${filtered.length === 1 ? "" : "s"} · Add opens grokbot:// or the marketplace page`;
 }
