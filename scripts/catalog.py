@@ -1,0 +1,604 @@
+#!/usr/bin/env python3
+"""Browse the public Grok Bot marketplace catalog.
+
+There is no public marketplace REST API. This tool scrapes the SSR HTML at
+https://x.ai/bot/marketplace (anchor #marketplace-catalog), where the full
+catalog is embedded in the Next.js flight payload.
+
+Install is only via each bot's addHref (grokbot://app/v1/bot-template?id=…).
+Never call a fake install endpoint. Return addHref + marketplaceUrl for the
+user to open.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import re
+import sys
+import urllib.error
+import urllib.request
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any, Iterable
+
+PLUGIN_ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_CATALOG_PATH = PLUGIN_ROOT / "data" / "catalog.json"
+MARKETPLACE_URL = "https://x.ai/bot/marketplace"
+MARKETPLACE_CATALOG_URL = f"{MARKETPLACE_URL}#marketplace-catalog"
+BOT_PAGE_URL = MARKETPLACE_URL + "/bots/{id}"
+USER_AGENT = (
+    "grok-bot-marketplace-plugin/0.1 "
+    "(+https://github.com/dadoedo/grok-bot-marketplace-plugin)"
+)
+INSTALL_NOTE = (
+    "There is no public Bot marketplace REST API. Install is only via the "
+    "addHref grokbot:// deep link (or the marketplace URL) — open it in Grok Bot. "
+    "Do not POST or invent an install endpoint."
+)
+
+NEXT_F_PUSH = re.compile(
+    r"self\.__next_f\.push\(\[1,(\"(?:\\.|[^\"\\])*\")\]\)"
+)
+
+DETAIL_LIST_FIELDS = ("memories", "skills", "routines", "integrations")
+
+
+class CatalogError(RuntimeError):
+    """Catalog fetch or parse failure."""
+
+
+def _json_value_at_generic(src: str, start: int) -> str:
+    """Brace-match an object or array, tracking both {} and []."""
+    if start >= len(src) or src[start] not in "{[":
+        raise CatalogError("Expected JSON object or array in page payload")
+    stack: list[str] = []
+    in_str = False
+    esc = False
+    pairs = {"{": "}", "[": "]"}
+    for i, ch in enumerate(src[start:], start):
+        if in_str:
+            if esc:
+                esc = False
+            elif ch == "\\":
+                esc = True
+            elif ch == '"':
+                in_str = False
+            continue
+        if ch == '"':
+            in_str = True
+            continue
+        if ch in "{[":
+            stack.append(pairs[ch])
+        elif ch in "}]":
+            if not stack or stack[-1] != ch:
+                raise CatalogError("Mismatched JSON brackets in page payload")
+            stack.pop()
+            if not stack:
+                return src[start : i + 1]
+    raise CatalogError("Unclosed JSON value in page payload")
+
+
+def flight_text(html: str) -> str:
+    """Concatenate Next.js ``self.__next_f`` string payloads."""
+    parts = [json.loads(m.group(1)) for m in NEXT_F_PUSH.finditer(html)]
+    if not parts:
+        raise CatalogError(
+            "No Next.js flight payload found. The marketplace HTML shape may have changed."
+        )
+    return "".join(parts)
+
+
+def _find_json_key(text: str, key: str) -> int:
+    """Return the index of a JSON value after ``"key":``, allowing whitespace."""
+    pattern = re.compile(r'"' + re.escape(key) + r'"\s*:')
+    match = pattern.search(text)
+    if not match:
+        return -1
+    i = match.end()
+    while i < len(text) and text[i].isspace():
+        i += 1
+    return i
+
+
+def parse_templates(html: str) -> list[dict[str, Any]]:
+    """Extract the embedded ``templates`` array from marketplace HTML."""
+    text = flight_text(html)
+    value_at = _find_json_key(text, "templates")
+    if value_at < 0:
+        raise CatalogError(
+            "No templates array in marketplace payload. The catalog embed may have changed."
+        )
+    raw = _json_value_at_generic(text, value_at)
+    templates = json.loads(raw)
+    if not isinstance(templates, list) or not templates:
+        raise CatalogError("Marketplace templates array was empty or not a list")
+    return templates
+
+
+def parse_bot_detail(html: str, bot_id: str | None = None) -> dict[str, Any]:
+    """Extract one bot object from a detail page payload."""
+    text = flight_text(html)
+    search_from = 0
+    while True:
+        idx = text.find('"addHref"', search_from)
+        if idx < 0:
+            break
+        start = text.rfind("{", 0, idx)
+        found = None
+        while start >= 0:
+            try:
+                raw = _json_value_at_generic(text, start)
+                obj = json.loads(raw)
+            except (CatalogError, json.JSONDecodeError):
+                start = text.rfind("{", 0, start)
+                continue
+            if isinstance(obj, dict) and obj.get("addHref") and obj.get("id"):
+                if bot_id is None or obj.get("id") == bot_id:
+                    found = obj
+                    break
+            start = text.rfind("{", 0, start)
+        if found:
+            return found
+        search_from = idx + 1
+    raise CatalogError("Could not parse bot detail object from page payload")
+
+
+def marketplace_url_for(bot_id: str) -> str:
+    return BOT_PAGE_URL.format(id=bot_id)
+
+
+def normalize_bot(raw: dict[str, Any], *, include_details: bool = False) -> dict[str, Any]:
+    bot_id = str(raw.get("id") or "").strip()
+    if not bot_id:
+        raise CatalogError("Bot record missing id")
+    description = (raw.get("description") or raw.get("summary") or "") or ""
+    summary = (raw.get("summary") or raw.get("description") or "") or ""
+    categories = raw.get("categories") or []
+    if not isinstance(categories, list):
+        categories = [str(categories)]
+    categories = [str(c) for c in categories if c]
+    install_count = raw.get("installCount")
+    if install_count is not None:
+        try:
+            install_count = int(install_count)
+        except (TypeError, ValueError):
+            install_count = None
+    bot = {
+        "id": bot_id,
+        "name": str(raw.get("name") or ""),
+        "creatorName": str(raw.get("creatorName") or ""),
+        "handle": str(raw.get("handle") or ""),
+        "description": str(description),
+        "summary": str(summary),
+        "categories": categories,
+        "installCount": install_count,
+        "color": raw.get("color"),
+        "shape": raw.get("shape"),
+        "imageUrl": raw.get("imageUrl") or None,
+        "addHref": str(raw.get("addHref") or ""),
+        "marketplaceUrl": marketplace_url_for(bot_id),
+    }
+    if include_details:
+        instructions = raw.get("instructions") or ""
+        bot["instructions"] = str(instructions) if instructions else ""
+        bot["memories"] = _summarize_named(raw.get("memories") or [], "description")
+        bot["skills"] = _summarize_named(raw.get("skills") or [], "description")
+        bot["routines"] = _summarize_named(raw.get("routines") or [], "summary")
+        bot["integrations"] = _summarize_named(raw.get("integrations") or [], "description")
+    return bot
+
+
+def _summarize_named(items: Iterable[Any], text_key: str, limit: int = 400) -> list[dict[str, str]]:
+    out: list[dict[str, str]] = []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        text = str(item.get(text_key) or item.get("content") or item.get("description") or "")
+        if len(text) > limit:
+            text = text[: limit - 1].rstrip() + "…"
+        out.append(
+            {
+                "id": str(item.get("id") or ""),
+                "name": str(item.get("name") or ""),
+                "text": text,
+            }
+        )
+    return out
+
+
+def public_card(bot: dict[str, Any]) -> dict[str, Any]:
+    """Fields skills/tools must return for list/search/compare."""
+    card = {
+        "id": bot.get("id"),
+        "name": bot.get("name"),
+        "creator": bot.get("creatorName"),
+        "handle": bot.get("handle"),
+        "description": bot.get("summary") or bot.get("description"),
+        "categories": bot.get("categories") or [],
+        "installCount": bot.get("installCount"),
+        "marketplaceUrl": bot.get("marketplaceUrl") or marketplace_url_for(str(bot.get("id") or "")),
+        "addHref": bot.get("addHref") or "",
+    }
+    for key in DETAIL_LIST_FIELDS:
+        if key in bot:
+            card[key] = bot[key]
+    if bot.get("instructions"):
+        card["instructions"] = bot["instructions"]
+    if bot.get("detailsError"):
+        card["detailsError"] = bot["detailsError"]
+    return card
+
+
+def fetch_url(url: str, timeout: int = 30) -> str:
+    req = urllib.request.Request(
+        url,
+        headers={
+            "User-Agent": USER_AGENT,
+            "Accept": "text/html,application/xhtml+xml;q=0.9,*/*;q=0.8",
+        },
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return resp.read().decode("utf-8", errors="replace")
+    except urllib.error.URLError as exc:
+        raise CatalogError(f"Failed to fetch {url}: {exc}") from exc
+
+
+def build_catalog_document(templates: list[dict[str, Any]], *, fetched_at: str | None = None) -> dict[str, Any]:
+    bots = [normalize_bot(t) for t in templates]
+    bots.sort(key=lambda b: (b["name"] or "").lower())
+    categories: dict[str, int] = {}
+    for bot in bots:
+        for cat in bot["categories"]:
+            categories[cat] = categories.get(cat, 0) + 1
+    return {
+        "source": MARKETPLACE_CATALOG_URL,
+        "fetchedAt": fetched_at or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "botCount": len(bots),
+        "categories": [
+            {"name": name, "count": categories[name]}
+            for name in sorted(categories, key=lambda n: (-categories[n], n.lower()))
+        ],
+        "install": {
+            "method": "grokbot-deeplink",
+            "note": INSTALL_NOTE,
+        },
+        "bots": bots,
+    }
+
+
+def refresh_catalog(path: Path = DEFAULT_CATALOG_PATH) -> dict[str, Any]:
+    html = fetch_url(MARKETPLACE_URL)
+    templates = parse_templates(html)
+    document = build_catalog_document(templates)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(document, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    return document
+
+
+def load_catalog(path: Path = DEFAULT_CATALOG_PATH) -> dict[str, Any]:
+    if not path.is_file():
+        raise CatalogError(
+            f"No catalog snapshot at {path}. Run: python3 scripts/catalog.py refresh"
+        )
+    try:
+        document = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise CatalogError(f"Catalog snapshot is not valid JSON: {exc}") from exc
+    if not isinstance(document, dict) or not isinstance(document.get("bots"), list):
+        raise CatalogError("Catalog snapshot missing bots[]")
+    return document
+
+
+def _haystack(bot: dict[str, Any]) -> str:
+    parts = [
+        bot.get("id") or "",
+        bot.get("name") or "",
+        bot.get("creatorName") or "",
+        bot.get("handle") or "",
+        bot.get("description") or "",
+        bot.get("summary") or "",
+        " ".join(bot.get("categories") or []),
+    ]
+    return " ".join(parts).lower()
+
+
+def filter_bots(
+    bots: list[dict[str, Any]],
+    *,
+    query: str | None = None,
+    category: str | None = None,
+) -> list[dict[str, Any]]:
+    results = bots
+    if category:
+        needle = category.strip().lower()
+        results = [
+            b
+            for b in results
+            if any(needle == c.lower() or needle in c.lower() for c in (b.get("categories") or []))
+        ]
+    if query:
+        tokens = [t for t in query.lower().split() if t]
+        results = [b for b in results if all(tok in _haystack(b) for tok in tokens)]
+    return results
+
+
+def sort_bots(bots: list[dict[str, Any]], sort: str) -> list[dict[str, Any]]:
+    if sort == "installs":
+        return sorted(
+            bots,
+            key=lambda b: (
+                -(b.get("installCount") or 0),
+                (b.get("name") or "").lower(),
+            ),
+        )
+    return sorted(bots, key=lambda b: (b.get("name") or "").lower())
+
+
+def find_bots(bots: list[dict[str, Any]], identifiers: list[str]) -> tuple[list[dict[str, Any]], list[str]]:
+    by_id = {b["id"].lower(): b for b in bots}
+    by_name = {}
+    for b in bots:
+        by_name.setdefault((b.get("name") or "").lower(), []).append(b)
+    found: list[dict[str, Any]] = []
+    missing: list[str] = []
+    seen: set[str] = set()
+    for ident in identifiers:
+        key = ident.strip().lower()
+        if not key:
+            continue
+        match = by_id.get(key)
+        if match is None:
+            names = by_name.get(key) or []
+            match = names[0] if len(names) == 1 else None
+            if match is None and len(names) > 1:
+                missing.append(f"{ident} (ambiguous name; use id)")
+                continue
+        if match is None:
+            # prefix / substring on id or name
+            hits = [
+                b
+                for b in bots
+                if key == (b.get("handle") or "").lower()
+                or key in b["id"].lower()
+                or key in (b.get("name") or "").lower()
+            ]
+            if len(hits) == 1:
+                match = hits[0]
+            elif len(hits) > 1:
+                missing.append(f"{ident} (ambiguous; use id)")
+                continue
+        if match is None:
+            missing.append(ident)
+            continue
+        if match["id"] in seen:
+            continue
+        seen.add(match["id"])
+        found.append(match)
+    return found, missing
+
+
+def fetch_details(bot: dict[str, Any]) -> dict[str, Any]:
+    html = fetch_url(marketplace_url_for(bot["id"]))
+    raw = parse_bot_detail(html, bot["id"])
+    detailed = normalize_bot(raw, include_details=True)
+    # Prefer live addHref/description when present; keep snapshot fallbacks.
+    merged = dict(bot)
+    merged.update(detailed)
+    return merged
+
+
+def envelope(
+    document: dict[str, Any],
+    results: list[dict[str, Any]],
+    *,
+    extra: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    payload = {
+        "source": document.get("source") or MARKETPLACE_CATALOG_URL,
+        "fetchedAt": document.get("fetchedAt"),
+        "botCount": document.get("botCount"),
+        "resultCount": len(results),
+        "install": document.get("install")
+        or {"method": "grokbot-deeplink", "note": INSTALL_NOTE},
+        "results": [public_card(b) for b in results],
+    }
+    if extra:
+        payload.update(extra)
+    return payload
+
+
+def print_json(payload: Any) -> None:
+    json.dump(payload, sys.stdout, indent=2, ensure_ascii=False)
+    sys.stdout.write("\n")
+
+
+def print_text_cards(payload: dict[str, Any]) -> None:
+    print(f"Source: {payload.get('source')}  (fetched {payload.get('fetchedAt')})")
+    print(f"Results: {payload.get('resultCount')} / {payload.get('botCount')} bots in snapshot")
+    print(INSTALL_NOTE)
+    print()
+    for bot in payload.get("results") or []:
+        cats = ", ".join(bot.get("categories") or []) or "—"
+        installs = bot.get("installCount")
+        installs_s = "n/a" if installs is None else str(installs)
+        handle = f" @{bot['handle']}" if bot.get("handle") else ""
+        print(f"- {bot.get('name')} — {bot.get('creator')}{handle}")
+        print(f"  {bot.get('description')}")
+        print(f"  categories: {cats}  installs: {installs_s}  id: {bot.get('id')}")
+        print(f"  marketplace: {bot.get('marketplaceUrl')}")
+        print(f"  addHref: {bot.get('addHref')}")
+        if bot.get("instructions"):
+            print(f"  instructions: {bot['instructions'][:500]}")
+        for group in DETAIL_LIST_FIELDS:
+            items = bot.get(group) or []
+            if not items:
+                continue
+            print(f"  {group}:")
+            for item in items:
+                text = item.get("text") or ""
+                print(f"    - {item.get('name')}: {text[:240]}")
+        print()
+
+
+def cmd_refresh(args: argparse.Namespace) -> int:
+    path = Path(args.catalog)
+    document = refresh_catalog(path)
+    extra = {"wrote": str(path), "categories": document.get("categories")}
+    payload = envelope(document, document["bots"] if args.list else [], extra=extra)
+    if not args.list:
+        payload.pop("results", None)
+        payload["resultCount"] = 0
+    _emit(payload, args.format)
+    return 0
+
+
+def cmd_list(args: argparse.Namespace) -> int:
+    document = load_catalog(Path(args.catalog))
+    bots = filter_bots(document["bots"], category=args.category)
+    bots = sort_bots(bots, args.sort)
+    if args.limit is not None:
+        bots = bots[: args.limit]
+    extra = {"categories": document.get("categories")} if args.with_categories else None
+    _emit(envelope(document, bots, extra=extra), args.format)
+    return 0
+
+
+def cmd_search(args: argparse.Namespace) -> int:
+    document = load_catalog(Path(args.catalog))
+    bots = filter_bots(document["bots"], query=args.query, category=args.category)
+    bots = sort_bots(bots, args.sort)
+    if args.limit is not None:
+        bots = bots[: args.limit]
+    _emit(envelope(document, bots, extra={"query": args.query, "category": args.category}), args.format)
+    return 0
+
+
+def cmd_categories(args: argparse.Namespace) -> int:
+    document = load_catalog(Path(args.catalog))
+    payload = {
+        "source": document.get("source"),
+        "fetchedAt": document.get("fetchedAt"),
+        "botCount": document.get("botCount"),
+        "categories": document.get("categories") or [],
+        "install": document.get("install"),
+    }
+    _emit(payload, args.format)
+    return 0
+
+
+def cmd_show(args: argparse.Namespace) -> int:
+    document = load_catalog(Path(args.catalog))
+    found, missing = find_bots(document["bots"], args.ids)
+    if args.details:
+        found = [_safe_details(b) for b in found]
+    extra = {"missing": missing} if missing else None
+    _emit(envelope(document, found, extra=extra), args.format)
+    return 1 if missing and not found else 0
+
+
+def cmd_compare(args: argparse.Namespace) -> int:
+    document = load_catalog(Path(args.catalog))
+    found, missing = find_bots(document["bots"], args.ids)
+    if args.details:
+        found = [_safe_details(b) for b in found]
+    extra = {"missing": missing} if missing else None
+    _emit(envelope(document, found, extra=extra), args.format)
+    return 1 if missing and not found else 0
+
+
+def _safe_details(bot: dict[str, Any]) -> dict[str, Any]:
+    try:
+        return fetch_details(bot)
+    except CatalogError as exc:
+        failed = dict(bot)
+        failed["detailsError"] = str(exc)
+        return failed
+
+
+def _emit(payload: dict[str, Any], fmt: str) -> None:
+    if fmt == "text":
+        if "results" in payload:
+            print_text_cards(payload)
+        else:
+            print_json(payload)
+        return
+    print_json(payload)
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description="List, search, and compare Grok Bot marketplace templates. "
+        "Install is via grokbot:// addHref only — no REST install API.",
+    )
+    parser.add_argument(
+        "--catalog",
+        default=str(DEFAULT_CATALOG_PATH),
+        help="Path to catalog snapshot JSON (default: data/catalog.json)",
+    )
+    parser.add_argument(
+        "--format",
+        choices=("json", "text"),
+        default="json",
+        help="Output format (json for agents, text for humans)",
+    )
+    sub = parser.add_subparsers(dest="command", required=True)
+
+    p_list = sub.add_parser("list", help="List bots from the snapshot")
+    p_list.add_argument("--category", help="Filter by category name (substring, case-insensitive)")
+    p_list.add_argument("--limit", type=int, default=None)
+    p_list.add_argument("--sort", choices=("name", "installs"), default="name")
+    p_list.add_argument("--with-categories", action="store_true", help="Include category counts")
+    p_list.set_defaults(func=cmd_list)
+
+    p_search = sub.add_parser("search", help="Search by keyword (name, creator, description, category)")
+    p_search.add_argument("query")
+    p_search.add_argument("--category", help="Also filter by category")
+    p_search.add_argument("--limit", type=int, default=None)
+    p_search.add_argument("--sort", choices=("name", "installs"), default="name")
+    p_search.set_defaults(func=cmd_search)
+
+    p_cats = sub.add_parser("categories", help="List category names and counts")
+    p_cats.set_defaults(func=cmd_categories)
+
+    p_show = sub.add_parser("show", help="Show one or more bots by id, name, or handle")
+    p_show.add_argument("ids", nargs="+")
+    p_show.add_argument(
+        "--details",
+        action="store_true",
+        help="Fetch each bot's marketplace detail page (instructions/memories/skills when present)",
+    )
+    p_show.set_defaults(func=cmd_show)
+
+    p_cmp = sub.add_parser("compare", help="Compare a few bots side by side")
+    p_cmp.add_argument("ids", nargs="+")
+    p_cmp.add_argument(
+        "--details",
+        action="store_true",
+        help="Fetch detail pages so compare can include instructions/memories/skills",
+    )
+    p_cmp.set_defaults(func=cmd_compare)
+
+    p_refresh = sub.add_parser("refresh", help="Fetch live marketplace HTML and rewrite data/catalog.json")
+    p_refresh.add_argument(
+        "--list",
+        action="store_true",
+        help="Include full bot list in the refresh response",
+    )
+    p_refresh.set_defaults(func=cmd_refresh)
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = build_parser()
+    args = parser.parse_args(argv)
+    try:
+        return int(args.func(args))
+    except CatalogError as exc:
+        print(json.dumps({"error": str(exc), "install": {"note": INSTALL_NOTE}}), file=sys.stderr)
+        return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main())

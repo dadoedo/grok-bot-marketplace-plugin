@@ -1,0 +1,21 @@
+{
+  "name": "grok-bot-marketplace",
+  "displayName": "Grok Bot Marketplace",
+  "version": "0.1.0",
+  "description": "Browse and search the public Grok Bot marketplace from an agent. Returns catalog fields plus grokbot:// install links — there is no public install API.",
+  "author": {
+    "name": "David Stredansky",
+    "email": "d.stredansky@gmail.com"
+  },
+  "homepage": "https://github.com/dadoedo/grok-bot-marketplace-plugin",
+  "repository": "https://github.com/dadoedo/grok-bot-marketplace-plugin",
+  "license": "MIT",
+  "keywords": [
+    "grok",
+    "grok-bot",
+    "marketplace",
+    "xai",
+    "skills"
+  ],
+  "logo": "assets/logo.svg"
+}

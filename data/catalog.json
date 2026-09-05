@@ -1,0 +1,1261 @@
+{
+  "source": "https://x.ai/bot/marketplace#marketplace-catalog",
+  "fetchedAt": "2026-09-05T08:38:31Z",
+  "botCount": 69,
+  "categories": [
+    {
+      "name": "From Grok Bot Team",
+      "count": 44
+    },
+    {
+      "name": "Sales",
+      "count": 19
+    },
+    {
+      "name": "Marketing",
+      "count": 17
+    },
+    {
+      "name": "Personal",
+      "count": 12
+    },
+    {
+      "name": "Engineering",
+      "count": 5
+    },
+    {
+      "name": "Design",
+      "count": 4
+    },
+    {
+      "name": "Operations",
+      "count": 4
+    },
+    {
+      "name": "Product",
+      "count": 3
+    },
+    {
+      "name": "Recruiting & People",
+      "count": 2
+    }
+  ],
+  "install": {
+    "method": "grokbot-deeplink",
+    "note": "There is no public Bot marketplace REST API. Install is only via the addHref grokbot:// deep link (or the marketplace URL) — open it in Grok Bot. Do not POST or invent an install endpoint."
+  },
+  "bots": [
+    {
+      "id": "account-book",
+      "name": "Account Research Desk",
+      "creatorName": "Anoop Baliga",
+      "handle": "akbaliga96",
+      "description": "Researches the companies you sell to and writes your pre-call brief and account plan. Works from the public web and the notes you paste, and never sends without you.",
+      "summary": "Researches the companies you sell to and writes your pre-call brief and account plan. Works from the public web and the notes you paste, and never sends without you.",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "installCount": 0,
+      "color": "blue",
+      "shape": "dome",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/2a02dc68-da57-4194-90ce-b28e4b2135b9.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=O3iqVd_ZrdRtrDJpxcKss",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/account-book"
+    },
+    {
+      "id": "fuse",
+      "name": "Ad Spend Watch",
+      "creatorName": "Miguel Cruz",
+      "handle": "cruzmiguel000",
+      "description": "Watches your ad spend and performance and flags what's breaking before it burns budget. Works from a pasted export, and never pauses a campaign without your yes.",
+      "summary": "Watches your ad spend and performance and flags what's breaking before it burns budget. Works from a pasted export, and never pauses a campaign without your yes.",
+      "categories": [
+        "From Grok Bot Team",
+        "Marketing"
+      ],
+      "installCount": 0,
+      "color": "black",
+      "shape": "blob",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/971347ee-4462-4cec-906b-8479c7e6d8e8.png",
+      "addHref": "grokbot://app/v1/bot-template?id=MK5zStpj_As8CsRwg3r6w",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/fuse"
+    },
+    {
+      "id": "ai-search-visibility",
+      "name": "AI Search Visibility",
+      "creatorName": "Adam Tanguay",
+      "handle": "adamta",
+      "description": "Checks whether AI assistants and Google recommend you, and who they name instead. Starts from a handful of questions your buyers actually ask.",
+      "summary": "Checks whether AI assistants and Google recommend you, and who they name instead. Starts from a handful of questions your buyers actually ask.",
+      "categories": [
+        "From Grok Bot Team",
+        "Marketing"
+      ],
+      "installCount": 0,
+      "color": "blue",
+      "shape": "crystal",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/f608b717-4f3c-4ff4-993c-86941e8ece5c.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=BFiw9Y7BzTQ-3jFBAro1X",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/ai-search-visibility"
+    },
+    {
+      "id": "alfred",
+      "name": "Alfred",
+      "creatorName": "Robin Delta",
+      "handle": "heyrobinai",
+      "description": "Designs, audits, and governs your Grok Bot organization so it matches real company outcomes, with clear human owners and no duplicate jobs. Recommends the smallest useful structure, defaults new bots to zero, and never creates or changes anything without your exact yes.",
+      "summary": "Designs, audits, and governs your Grok Bot organization so it matches real company outcomes, with clear human owners and no duplicate jobs. Recommends the smallest useful structure, defaults new bots to zero, and never creates or changes anything without your exact yes.",
+      "categories": [
+        "Operations"
+      ],
+      "installCount": 0,
+      "color": "orange",
+      "shape": "squircle",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/90ca0f65-6e00-4f6d-a109-f389a39f9fd0.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=p7Gh6HIrfv4AGzIow6-9X",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/alfred"
+    },
+    {
+      "id": "apple-search-ads-review",
+      "name": "Apple Search Ads Review",
+      "creatorName": "Chris Everett",
+      "handle": "",
+      "description": "Reviews your Apple Search Ads spend against your cost per install target. Drafts the keyword, bid, and budget changes, and never touches your account.",
+      "summary": "Reviews your Apple Search Ads spend against your cost per install target. Drafts the keyword, bid, and budget changes, and never touches your account.",
+      "categories": [
+        "From Grok Bot Team",
+        "Marketing"
+      ],
+      "installCount": 0,
+      "color": "green",
+      "shape": "blob",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/a6631b76-50be-43e3-aac4-a504b1cfe98a.png",
+      "addHref": "grokbot://app/v1/bot-template?id=gadc3bVOsg9iIwmzAGRve",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/apple-search-ads-review"
+    },
+    {
+      "id": "call-follow-ups",
+      "name": "Call Follow-Ups",
+      "creatorName": "Daniel Brill",
+      "handle": "danielbrill_",
+      "description": "Turns a call transcript into a recap, every promise made, and a dated follow-up list. Works from a paste or an upload, and never sends a follow-up without you.",
+      "summary": "Turns a call transcript into a recap, every promise made, and a dated follow-up list. Works from a paste or an upload, and never sends a follow-up without you.",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "installCount": 0,
+      "color": "cyan",
+      "shape": "capsule",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/b27ce95a-6549-4d7c-8336-b11aa6d5e36b.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=estQ8HWdKqhheDNmOGjcy",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/call-follow-ups"
+    },
+    {
+      "id": "chief-health",
+      "name": "Chief Health Officer",
+      "creatorName": "AJAC",
+      "handle": "AJA_Cortes",
+      "description": "You're the Chief Health Officer. Every day, ask if training happened. If it did not, rewrite the next session so the week still holds. Read whatever workout app, nutrition app, wearable, or lab source is connected. Do not invent numbers. Never diagnose, prescribe, or post.",
+      "summary": "You're the Chief Health Officer. Every day, ask if training happened. If it did not, rewrite the next session so the week still holds. Read whatever workout app, nutrition app, wearable, or lab source is connected. Do not invent numbers. Never diagnose, prescribe, or post.",
+      "categories": [
+        "Personal"
+      ],
+      "installCount": 0,
+      "color": "magenta",
+      "shape": "squircle",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/e22d1951-01c2-4613-ad8d-a6a3d592f394.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=PwWb6fJXpeG857af6tEYi",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/chief-health"
+    },
+    {
+      "id": "clip-bot",
+      "name": "Clip Bot",
+      "creatorName": "This Week in AI",
+      "handle": "ThisWeeknAI",
+      "description": "Finds the best moments in a long recording and cuts them into short captioned clips. Works from an upload or a link, with transcript and timestamps on every clip.",
+      "summary": "Finds the best moments in a long recording and cuts them into short captioned clips. Works from an upload or a link, with transcript and timestamps on every clip.",
+      "categories": [
+        "Marketing"
+      ],
+      "installCount": 0,
+      "color": "cyan",
+      "shape": "wedge",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/6585c1dd-4f0c-4a18-9274-cec3bbf4eef9.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=-L1yFJ5mtwPgn3O_iYUo_",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/clip-bot"
+    },
+    {
+      "id": "company-docs-q-a",
+      "name": "Company Docs Q&A",
+      "creatorName": "Anoop Baliga",
+      "handle": "akbaliga96",
+      "description": "Answers product and how-to questions from live docs first, then connected knowledge sources, and always cites sources. Built for anyone who wants a trustworthy internal knowledge bot.",
+      "summary": "Answers product and how-to questions from live docs first, then connected knowledge sources, and always cites sources. Built for anyone who wants a trustworthy internal knowledge bot.",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "installCount": 0,
+      "color": "blue",
+      "shape": "leaf",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/2a02dc68-da57-4194-90ce-b28e4b2135b9.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=GVAnpUah1K6PzJtG9EuG9",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/company-docs-q-a"
+    },
+    {
+      "id": "competitor-watching",
+      "name": "Competitor Watch",
+      "creatorName": "Shimecki",
+      "handle": "scheemunai",
+      "description": "Tracks competitor pricing, product, and hiring pages and briefs you on real changes. Starts from a list of URLs you paste.",
+      "summary": "Tracks competitor pricing, product, and hiring pages and briefs you on real changes. Starts from a list of URLs you paste.",
+      "categories": [
+        "Product"
+      ],
+      "installCount": 0,
+      "color": "gray",
+      "shape": "hex",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/666f7d42-2844-4012-9a1a-4388ec4fc1af.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=aw0Zj54sIsAK7vMnajdz0",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/competitor-watching"
+    },
+    {
+      "id": "cooper",
+      "name": "Cooper",
+      "creatorName": "Tommy Hansen",
+      "handle": "TommyHansenTA",
+      "description": "News agent for AI, tech, venture capital, and business. Delivers a tight daily Slack briefing of top stories at 8am, plus weekday mid-day competitor alerts only when something truly clears the bar.",
+      "summary": "News agent for AI, tech, venture capital, and business. Delivers a tight daily Slack briefing of top stories at 8am, plus weekday mid-day competitor alerts only when something truly clears the bar.",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "installCount": 0,
+      "color": "brown",
+      "shape": "pebble",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/3c194063-9aa8-46e5-8007-382378bebd1b.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=8hhdYqfvRzigWstUtcmBZ",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/cooper"
+    },
+    {
+      "id": "human-copywriter",
+      "name": "Copy Humanizer",
+      "creatorName": "Massimo De Luisa",
+      "handle": "massimodeluisa",
+      "description": "Edits and rewrites drafts, emails, and pages so they read like a person wrote them. Keeps your voice, shows every change and why, and never invents a fact.",
+      "summary": "Edits and rewrites drafts, emails, and pages so they read like a person wrote them. Keeps your voice, shows every change and why, and never invents a fact.",
+      "categories": [
+        "Marketing"
+      ],
+      "installCount": 0,
+      "color": "violet",
+      "shape": "tablet",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/53015714-5da9-4083-b356-dbc407c9a90b.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=YwxIbVEWqXN-HYCxiMCoB",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/human-copywriter"
+    },
+    {
+      "id": "credit-card-max",
+      "name": "Credit Card Max",
+      "creatorName": "Trevin Chow",
+      "handle": "trevin",
+      "description": "Advises which credit card to use for a given purchase to maximize points, cash back, and perks. Tracks cards, unused benefits, and misrouted recurring charges, and runs a monthly utilization review.",
+      "summary": "Advises which credit card to use for a given purchase to maximize points, cash back, and perks. Tracks cards, unused benefits, and misrouted recurring charges, and runs a monthly utilization review.",
+      "categories": [
+        "Personal"
+      ],
+      "installCount": 0,
+      "color": "cyan",
+      "shape": "tablet",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/a9f6fb9a-ab36-4995-8750-c3f69e5c68c5.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=q4u8YgzGQqCAOUZcg0Lgt",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/credit-card-max"
+    },
+    {
+      "id": "critiquito",
+      "name": "Critiquito: Design Critique",
+      "creatorName": "Manuel Muñoz Solera",
+      "handle": "mamuso",
+      "description": "Turns a screenshot or Figma link into a design critique with ranked, concrete fixes. Covers hierarchy, type, color, copy, and accessibility, and never edits your files.",
+      "summary": "Turns a screenshot or Figma link into a design critique with ranked, concrete fixes. Covers hierarchy, type, color, copy, and accessibility, and never edits your files.",
+      "categories": [
+        "From Grok Bot Team",
+        "Design"
+      ],
+      "installCount": 0,
+      "color": "black",
+      "shape": "squircle",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/29927420-5910-4863-9871-0c0847d14559.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=NqdH9qGvrq-yWRaXhJGM-",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/critiquito"
+    },
+    {
+      "id": "customer-call-coach",
+      "name": "Customer Call Coach & Assistant",
+      "creatorName": "Anoop Baliga",
+      "handle": "akbaliga96",
+      "description": "Briefs you before customer calls and coaches you after based on your performance.",
+      "summary": "Briefs you before customer calls and coaches you after based on your performance.",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "installCount": 0,
+      "color": "cyan",
+      "shape": "teardrop",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/2a02dc68-da57-4194-90ce-b28e4b2135b9.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=v1lSvhJCo4UrNGZxc5Fw8",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/customer-call-coach"
+    },
+    {
+      "id": "customer-stories",
+      "name": "Customer Proof Desk",
+      "creatorName": "Anoop Baliga",
+      "handle": "akbaliga96",
+      "description": "Turns call notes and transcripts into case studies, testimonials, and proof points. Quotes stay word for word from what you paste, and nothing publishes without your yes.",
+      "summary": "Turns call notes and transcripts into case studies, testimonials, and proof points. Quotes stay word for word from what you paste, and nothing publishes without your yes.",
+      "categories": [
+        "Sales"
+      ],
+      "installCount": 0,
+      "color": "orange",
+      "shape": "crystal",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/2a02dc68-da57-4194-90ce-b28e4b2135b9.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=AamPlGjd2lIdDv6seEMXR",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/customer-stories"
+    },
+    {
+      "id": "deal-hunting",
+      "name": "Deal Hunting",
+      "creatorName": "Shimecki",
+      "handle": "scheemunai",
+      "description": "Landed-cost shopping: real prices, shipping and tax, preferred retailers. Watchlist optional. Never buys unless asked.",
+      "summary": "Landed-cost shopping: real prices, shipping and tax, preferred retailers. Watchlist optional. Never buys unless asked.",
+      "categories": [
+        "Personal"
+      ],
+      "installCount": 0,
+      "color": "magenta",
+      "shape": "hex",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/666f7d42-2844-4012-9a1a-4388ec4fc1af.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=yTeKCLayahHnMdHFG9GJg",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/deal-hunting"
+    },
+    {
+      "id": "deal-qualification",
+      "name": "Deal Inspector",
+      "creatorName": "Jon Grigull",
+      "handle": "",
+      "description": "Checks each deal against MEDDIC, MEDDPICC, BANT, SPICED, or your own process. Shows what is supported, what is missing, and the questions or CRM changes needed before the deal moves forward.",
+      "summary": "Checks each deal against MEDDIC, MEDDPICC, BANT, SPICED, or your own process. Shows what is supported, what is missing, and the questions or CRM changes needed before the deal moves forward.",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "installCount": 0,
+      "color": "violet",
+      "shape": "pebble",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/f5db26a4-54e6-42af-a2cb-25c1b44206de.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=vZfC76-4UC1XU7qC4m726",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/deal-qualification"
+    },
+    {
+      "id": "dial-bot",
+      "name": "dial bot",
+      "creatorName": "Matt Palmer",
+      "handle": "mattyp",
+      "description": "Places outbound Bland AI phone calls when you ask, then reports what happened. On first use it asks for a Bland API key and voice.",
+      "summary": "Places outbound Bland AI phone calls when you ask, then reports what happened. On first use it asks for a Bland API key and voice.",
+      "categories": [
+        "From Grok Bot Team",
+        "Personal"
+      ],
+      "installCount": 0,
+      "color": "green",
+      "shape": "bean",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/280ad7d6-531b-47ba-a6eb-421f89971a81.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=tIas6udS9kSXpcAz6LFd1",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/dial-bot"
+    },
+    {
+      "id": "dr-eggbot-v2",
+      "name": "dr eggbot",
+      "creatorName": "Lauren Tan",
+      "handle": "poteto",
+      "description": "Designs high-quality Grok Bots. Asks a few preference questions, then creates them with CreateAgent. Coding bots get the poteto-mode bar (one job, unslopped, verified). Non-coding bots get the same tightness: one job, one voice, explicit anti-jobs, no leftover tools. Casual, a little mad-scientist, short lowercase. Bias to act once the job is clear. Does not default to shareable templates.",
+      "summary": "Designs high-quality Grok Bots. Asks a few preference questions, then creates them with CreateAgent. Coding bots get the poteto-mode bar (one job, unslopped, verified). Non-coding bots get the same tightness: one job, one voice, explicit anti-jobs, no leftover tools. Casual, a little mad-scientist, short lowercase. Bias to act once the job is clear. Does not default to shareable templates.",
+      "categories": [
+        "From Grok Bot Team"
+      ],
+      "installCount": 0,
+      "color": "red",
+      "shape": "teardrop",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/8172289b-4cc4-4d64-bed4-783080233ba3.png",
+      "addHref": "grokbot://app/v1/bot-template?id=_jOdbfkB16zxu7MRcmReE",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/dr-eggbot-v2"
+    },
+    {
+      "id": "event-producer",
+      "name": "Event Producer",
+      "creatorName": "Jenna Nanpei",
+      "handle": "jennananpei",
+      "description": "Turns your event details into a run of show, guest list, and day-of checklist. Tracks vendors, guests, dietary needs, and travel, and never sends a message without you.",
+      "summary": "Turns your event details into a run of show, guest list, and day-of checklist. Tracks vendors, guests, dietary needs, and travel, and never sends a message without you.",
+      "categories": [
+        "From Grok Bot Team",
+        "Marketing"
+      ],
+      "installCount": 0,
+      "color": "green",
+      "shape": "cloud",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/bbb48abb-eaf8-4f04-96e3-dc93d96ebb3f.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=wtEIGNZ8oipDDVQTDHMPB",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/event-producer"
+    },
+    {
+      "id": "event-request-desk",
+      "name": "Event Request Desk",
+      "creatorName": "Emma Weyrauch",
+      "handle": "",
+      "description": "Scores every event, sponsorship, and speaking ask, then drafts your yes or no. Works from a Slack channel or a paste, and never sends without you.",
+      "summary": "Scores every event, sponsorship, and speaking ask, then drafts your yes or no. Works from a Slack channel or a paste, and never sends without you.",
+      "categories": [
+        "From Grok Bot Team",
+        "Operations"
+      ],
+      "installCount": 0,
+      "color": "gray",
+      "shape": "wedge",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/9d09cbe4-74ab-4461-b666-62cdf7842f62.png",
+      "addHref": "grokbot://app/v1/bot-template?id=hp7QlVUPuYUp09kc6IFAA",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/event-request-desk"
+    },
+    {
+      "id": "frank",
+      "name": "Executive Assistant",
+      "creatorName": "Natasha Kuo",
+      "handle": "tashatweetss",
+      "description": "EA chief-of-staff bot for exec support: conference rooms, interview prep, leadership outreach, Slack channel inventories, sheet↔calendar checks, and birthday/anniversary calendar loads.",
+      "summary": "EA chief-of-staff bot for exec support: conference rooms, interview prep, leadership outreach, Slack channel inventories, sheet↔calendar checks, and birthday/anniversary calendar loads.",
+      "categories": [
+        "From Grok Bot Team",
+        "Operations"
+      ],
+      "installCount": 0,
+      "color": "gray",
+      "shape": "arch",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/b67914fc-5694-4966-83f2-9c1c0b426a14.png",
+      "addHref": "grokbot://app/v1/bot-template?id=_DnP777DCicZpaTtm9_h5",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/frank"
+    },
+    {
+      "id": "figma-bro",
+      "name": "figma bro",
+      "creatorName": "John Bai",
+      "handle": "johnbai",
+      "description": "Turns a Figma frame into a build spec, and audits your components, tokens, and motion. Builds screens from a brief too, and works from a pasted link when Figma isn't connected.",
+      "summary": "Turns a Figma frame into a build spec, and audits your components, tokens, and motion. Builds screens from a brief too, and works from a pasted link when Figma isn't connected.",
+      "categories": [
+        "From Grok Bot Team",
+        "Design"
+      ],
+      "installCount": 0,
+      "color": "magenta",
+      "shape": "gem",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/d8e9104b-ef81-4bfe-8141-007ed8203749.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=pXNvc_U2cGyZmheYrUuF_",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/figma-bro"
+    },
+    {
+      "id": "flora",
+      "name": "Flora: Plant Care Log",
+      "creatorName": "Rich Silver",
+      "handle": "RichSilver",
+      "description": "Flora keeps a private houseplant care log and weekly reminders. She builds a plant journal on her computer that you can page through, and your plants do not copy if someone else installs her.",
+      "summary": "Flora keeps a private houseplant care log and weekly reminders. She builds a plant journal on her computer that you can page through, and your plants do not copy if someone else installs her.",
+      "categories": [
+        "Personal"
+      ],
+      "installCount": 0,
+      "color": "green",
+      "shape": "leaf",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/5ccb78c2-f749-4d8d-9493-b06b278c4b93.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=dGYdqS9vLSXpxoNCPBHys",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/flora"
+    },
+    {
+      "id": "sable-game-art",
+      "name": "Game Art Director",
+      "creatorName": "Danny Limanseta",
+      "handle": "DannyLimanseta",
+      "description": "Turns a game concept into a style guide, palettes, and prompt sheets for your image tool. Slices sprite sheets and checks your art for palette and grid drift.",
+      "summary": "Turns a game concept into a style guide, palettes, and prompt sheets for your image tool. Slices sprite sheets and checks your art for palette and grid drift.",
+      "categories": [
+        "Design"
+      ],
+      "installCount": 0,
+      "color": "violet",
+      "shape": "teardrop",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/645823c1-8a41-41ef-8619-1d8decaa6f79.png",
+      "addHref": "grokbot://app/v1/bot-template?id=KQnsHIvv4_Xk7HyhmewP3",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/sable-game-art"
+    },
+    {
+      "id": "account-research",
+      "name": "GTM Account Research",
+      "creatorName": "Stefan Markarian",
+      "handle": "",
+      "description": "Researches one account before a meeting, deal review, or account plan. Brings together company changes, key people, relationship history, open questions, and the sources behind every finding.",
+      "summary": "Researches one account before a meeting, deal review, or account plan. Brings together company changes, key people, relationship history, open questions, and the sources behind every finding.",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "installCount": 0,
+      "color": "gray",
+      "shape": "cloud",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/5c18e7f7-30fa-4b10-92cf-768d9398c9e5.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=B6nsTFJlkGP4R-BbdIzeV",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/account-research"
+    },
+    {
+      "id": "warm-intro-finder",
+      "name": "GTM Connections",
+      "creatorName": "Brian Joseph",
+      "handle": "",
+      "description": "Finds credible ways into a target account through mutual contacts, past conversations, shared history, and prior meetings. Ranks the best paths, drafts the introduction ask, and tracks what happened.",
+      "summary": "Finds credible ways into a target account through mutual contacts, past conversations, shared history, and prior meetings. Ranks the best paths, drafts the introduction ask, and tracks what happened.",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "installCount": 0,
+      "color": "green",
+      "shape": "tablet",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/23e963e0-466f-4a2c-962a-7c6156acbd41.png",
+      "addHref": "grokbot://app/v1/bot-template?id=aUF_wTHXGWKU3-QPm6PmN",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/warm-intro-finder"
+    },
+    {
+      "id": "follow-through-agent",
+      "name": "GTM Loop Closer",
+      "creatorName": "Jon Grigull",
+      "handle": "",
+      "description": "Finds promises, follow-ups, and customer details left behind in meetings, email, Slack, CRM, or task tools. Shows the evidence and prepares the reply, task, or update needed to close each loop.",
+      "summary": "Finds promises, follow-ups, and customer details left behind in meetings, email, Slack, CRM, or task tools. Shows the evidence and prepares the reply, task, or update needed to close each loop.",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "installCount": 0,
+      "color": "red",
+      "shape": "hex",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/f5db26a4-54e6-42af-a2cb-25c1b44206de.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=gj3IlHOOpzecm6xpmPJOt",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/follow-through-agent"
+    },
+    {
+      "id": "prospector",
+      "name": "GTM Prospecting",
+      "creatorName": "Caro Scalercio",
+      "handle": "",
+      "description": "Turns an ideal customer profile into a focused prospect list, adds useful context, and checks for existing relationships. Drafts first-touch email and LinkedIn messages for your review.",
+      "summary": "Turns an ideal customer profile into a focused prospect list, adds useful context, and checks for existing relationships. Drafts first-touch email and LinkedIn messages for your review.",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "installCount": 0,
+      "color": "green",
+      "shape": "squircle",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/69d82b77-cf4a-4c8c-8a5c-b31eeb29c294.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=RpAQeGjhzaiO6_Rq_4fyC",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/prospector"
+    },
+    {
+      "id": "haggle-bot",
+      "name": "Haggle Bot",
+      "creatorName": "Daniel Gartshein",
+      "handle": "",
+      "description": "Inventories your SaaS spend from Ramp and bills, finds evidence-backed savings (unused seats, duplicates, cheaper alternatives), and drafts vendor counters for your review. Never spends, signs, or sends without you.",
+      "summary": "Inventories your SaaS spend from Ramp and bills, finds evidence-backed savings (unused seats, duplicates, cheaper alternatives), and drafts vendor counters for your review. Never spends, signs, or sends without you.",
+      "categories": [
+        "From Grok Bot Team"
+      ],
+      "installCount": 0,
+      "color": "gray",
+      "shape": "teardrop",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/35e160b9-335e-48d1-933d-b081e9be4a12.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=pwQ612YrX3R0eACnIMlom",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/haggle-bot"
+    },
+    {
+      "id": "hiring-activity-monitor",
+      "name": "Hiring Signals",
+      "creatorName": "Simon Lackowski",
+      "handle": "",
+      "description": "Tracks hiring activity across selected companies and job sources. Highlights meaningful changes, matches them to accounts and owners, and passes the right context into research or prospecting workflows.",
+      "summary": "Tracks hiring activity across selected companies and job sources. Highlights meaningful changes, matches them to accounts and owners, and passes the right context into research or prospecting workflows.",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "installCount": 0,
+      "color": "gray",
+      "shape": "squircle",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/a1dcc95f-0bc8-4d86-a3a9-ca17716d545c.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=EbF8AR1wEHSWCGOp9D1qK",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/hiring-activity-monitor"
+    },
+    {
+      "id": "home-robots",
+      "name": "Home robots",
+      "creatorName": "Sawyer Merritt",
+      "handle": "SawyerMerritt",
+      "description": "Control home robots from chat: a Segway Navimow, a Matic vacuum, and other official vacuums, mowers, and Matter robots. Connect each once, then say start, pause, dock, or how's it doing.",
+      "summary": "Control home robots from chat: a Segway Navimow, a Matic vacuum, and other official vacuums, mowers, and Matter robots. Connect each once, then say start, pause, dock, or how's it doing.",
+      "categories": [
+        "Personal"
+      ],
+      "installCount": 0,
+      "color": "orange",
+      "shape": "pebble",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/4f67f549-f337-4165-90a6-2fc49c784e0b.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=c47Jj2QSSR1UXEcuBgUtQ",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/home-robots"
+    },
+    {
+      "id": "imogen",
+      "name": "Imogen",
+      "creatorName": "Kent C. Dodds",
+      "handle": "kentcdodds",
+      "description": "Imogen the Impala Image Interpreter writes brief, copyable alt text focused on the most important part of an image, so images are accessible to blind people.",
+      "summary": "Imogen the Impala Image Interpreter writes brief, copyable alt text focused on the most important part of an image, so images are accessible to blind people.",
+      "categories": [
+        "Design"
+      ],
+      "installCount": 0,
+      "color": "violet",
+      "shape": "egg",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/7e39040a-78be-45f5-8040-d87f606ee9d7.png",
+      "addHref": "grokbot://app/v1/bot-template?id=Eeu5NZp62OzQjtlY4ons2",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/imogen"
+    },
+    {
+      "id": "last30days",
+      "name": "last30days",
+      "creatorName": "Matt Van Horn",
+      "handle": "mvanhorn",
+      "description": "Research what people actually say about any topic in the last 30 days. Installs the latest last30days skill from GitHub, walks first-run setup (ScrapeCreators via GitHub for the full free credits, X, YouTube, and the free CLIs), then writes a grounded brief from Reddit, X, YouTube, TikTok, Hacker News, Polymarket, GitHub, and the web. Checks GitHub for a new skill version every 30 days.",
+      "summary": "Research what people actually say about any topic in the last 30 days. Installs the latest last30days skill from GitHub, walks first-run setup (ScrapeCreators via GitHub for the full free credits, X, YouTube, and the free CLIs), then writes a grounded brief from Reddit, X, YouTube, TikTok, Hacker News, Polymarket, GitHub, and the web. Checks GitHub for a new skill version every 30 days.",
+      "categories": [
+        "Product",
+        "Marketing"
+      ],
+      "installCount": 0,
+      "color": "violet",
+      "shape": "tablet",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/d3804f6f-34f2-492a-9ef5-291887caa69d.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=TxB-fy1KryaYJLYWBcGtT",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/last30days"
+    },
+    {
+      "id": "leadsworth",
+      "name": "Lead Pipeline Desk",
+      "creatorName": "Miguel Cruz",
+      "handle": "cruzmiguel000",
+      "description": "Scores your inbound leads, merges duplicates, assigns an owner, and flags what's stuck. Works from a CRM export, a sheet, or a paste, and never sends anything without you.",
+      "summary": "Scores your inbound leads, merges duplicates, assigns an owner, and flags what's stuck. Works from a CRM export, a sheet, or a paste, and never sends anything without you.",
+      "categories": [
+        "From Grok Bot Team",
+        "Marketing"
+      ],
+      "installCount": 0,
+      "color": "green",
+      "shape": "capsule",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/971347ee-4462-4cec-906b-8479c7e6d8e8.png",
+      "addHref": "grokbot://app/v1/bot-template?id=oPDkINUfpUXhJDdsfRZht",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/leadsworth"
+    },
+    {
+      "id": "engineer-bot",
+      "name": "Lingxi's Engineer Bot",
+      "creatorName": "Lingxi Li",
+      "handle": "lingxi",
+      "description": "A hands-off engineering supervisor. Boards work, launches cloud agents on the repo you name, watches PRs on a 30-minute cadence, and only asks you to merge.",
+      "summary": "A hands-off engineering supervisor. Boards work, launches cloud agents on the repo you name, watches PRs on a 30-minute cadence, and only asks you to merge.",
+      "categories": [
+        "From Grok Bot Team",
+        "Engineering"
+      ],
+      "installCount": 0,
+      "color": "cyan",
+      "shape": "wedge",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/c21be108-f52c-4efd-9913-f03230caff30.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=SxqbG1NT5qEw7ggmHqQu_",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/engineer-bot"
+    },
+    {
+      "id": "love",
+      "name": "Love ❤️",
+      "creatorName": "Danny Buck",
+      "handle": "dannybuck",
+      "description": "Takes the admin out of being a good Partner so the attention can go where it counts. Reminds, researches, and queues dates, tables, and presents; you book, buy, and show up.",
+      "summary": "Takes the admin out of being a good Partner so the attention can go where it counts. Reminds, researches, and queues dates, tables, and presents; you book, buy, and show up.",
+      "categories": [
+        "Personal"
+      ],
+      "installCount": 0,
+      "color": "red",
+      "shape": "pebble",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/79c99c6f-3d7b-4e8f-b0c7-33dd4611088d.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=qDtCI8WZgVJKbN3rogL8j",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/love"
+    },
+    {
+      "id": "luma-pages",
+      "name": "Luma Pages",
+      "creatorName": "Jenna Nanpei",
+      "handle": "jennananpei",
+      "description": "Builds and updates private Luma event pages for field marketers — copy, branding, registration settings, capacity and waitlist, and registration-list hygiene. Pairs with a Notion docs agent so the event brief and Luma page stay in sync.",
+      "summary": "Builds and updates private Luma event pages for field marketers — copy, branding, registration settings, capacity and waitlist, and registration-list hygiene. Pairs with a Notion docs agent so the event brief and Luma page stay in sync.",
+      "categories": [
+        "From Grok Bot Team",
+        "Marketing"
+      ],
+      "installCount": 0,
+      "color": "orange",
+      "shape": "hex",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/bbb48abb-eaf8-4f04-96e3-dc93d96ebb3f.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=jHT5FLhpCMx7JeIq9BEHY",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/luma-pages"
+    },
+    {
+      "id": "echo",
+      "name": "Meeting Recap Deck",
+      "creatorName": "Krista Letz",
+      "handle": "kristaletz",
+      "description": "Turns your meeting notes into a recap deck in your slide template. Works from notes you paste or upload, and never invents a quote.",
+      "summary": "Turns your meeting notes into a recap deck in your slide template. Works from notes you paste or upload, and never invents a quote.",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "installCount": 0,
+      "color": "blue",
+      "shape": "blob",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/31329e53-ca7f-4f1b-9c50-b0041a4def99.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=YklttiPpAHweKbOLV1TSF",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/echo"
+    },
+    {
+      "id": "nightly-audit-engineer",
+      "name": "Nightly Audit Engineer",
+      "creatorName": "Lingxi Li",
+      "handle": "lingxi",
+      "description": "A nightly engineering auditor that researches a whole codebase, then ships one cleanup PR per area. Defaults to 4am and asks when to run before it starts.",
+      "summary": "A nightly engineering auditor that researches a whole codebase, then ships one cleanup PR per area. Defaults to 4am and asks when to run before it starts.",
+      "categories": [
+        "From Grok Bot Team",
+        "Engineering"
+      ],
+      "installCount": 0,
+      "color": "violet",
+      "shape": "pebble",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/c21be108-f52c-4efd-9913-f03230caff30.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=0LLQmzk-yzwHi0zuiV0lC",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/nightly-audit-engineer"
+    },
+    {
+      "id": "nyc-parent",
+      "name": "NYC Parent",
+      "creatorName": "Dennison",
+      "handle": "DennisonBertram",
+      "description": "A family chief of staff for New York City parents. It tracks school, calendar, activities, and household logistics, turns incoming information into next actions, and keeps adults in control of spending, messages, and private information.",
+      "summary": "A family chief of staff for New York City parents. It tracks school, calendar, activities, and household logistics, turns incoming information into next actions, and keeps adults in control of spending, messages, and private information.",
+      "categories": [
+        "Personal"
+      ],
+      "installCount": 0,
+      "color": "black",
+      "shape": "blob",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/05df5117-a392-4017-a414-c23f6fbcbf2a.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=cht7ytAhe3euOQy2wnEg9",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/nyc-parent"
+    },
+    {
+      "id": "office-ops-desk",
+      "name": "Office Ops Desk",
+      "creatorName": "Erika Cabrera",
+      "handle": "ericacabera",
+      "description": "Tracks office shipments, facilities issues, and team birthdays, then writes the digests. Works from a pasted list or a spreadsheet, and never sends without you.",
+      "summary": "Tracks office shipments, facilities issues, and team birthdays, then writes the digests. Works from a pasted list or a spreadsheet, and never sends without you.",
+      "categories": [
+        "From Grok Bot Team",
+        "Operations"
+      ],
+      "installCount": 0,
+      "color": "orange",
+      "shape": "squircle",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/f2621477-02b7-40c9-881f-3d51c9af1596.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=afZj-XnYkThA4MB7GfZK6",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/office-ops-desk"
+    },
+    {
+      "id": "pg",
+      "name": "Outbound Prospecting",
+      "creatorName": "Krista Letz",
+      "handle": "kristaletz",
+      "description": "Finds prospects that match your ideal customer, then drafts a first message to each one. Every name is researched on the public web, and nothing sends without your yes.",
+      "summary": "Finds prospects that match your ideal customer, then drafts a first message to each one. Every name is researched on the public web, and nothing sends without your yes.",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "installCount": 0,
+      "color": "magenta",
+      "shape": "pebble",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/31329e53-ca7f-4f1b-9c50-b0041a4def99.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=i03IaF768-ielyzegoGye",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/pg"
+    },
+    {
+      "id": "overheard",
+      "name": "Overheard",
+      "creatorName": "Lenny Rachitsky",
+      "handle": "lennysan",
+      "description": "Watches Reddit, Hacker News, news sites, and X for third-party mentions of your name, brand, and URLs, then sends a short weekday digest when something clears the bar. Stays quiet on dead days and never posts on your behalf.",
+      "summary": "Watches Reddit, Hacker News, news sites, and X for third-party mentions of your name, brand, and URLs, then sends a short weekday digest when something clears the bar. Stays quiet on dead days and never posts on your behalf.",
+      "categories": [],
+      "installCount": 0,
+      "color": "orange",
+      "shape": "teardrop",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/d9ad5a89-158e-4d89-ace0-180906ca4c02.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=NIEguoGUjA648fUPle8F5",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/overheard"
+    },
+    {
+      "id": "tally",
+      "name": "Paid Media Report Desk",
+      "creatorName": "Miguel Cruz",
+      "handle": "cruzmiguel000",
+      "description": "Turns your Google Ads, Meta, and LinkedIn exports into one weekly report with commentary. Answers reporting asks in Slack with real numbers, and never posts without your yes.",
+      "summary": "Turns your Google Ads, Meta, and LinkedIn exports into one weekly report with commentary. Answers reporting asks in Slack with real numbers, and never posts without your yes.",
+      "categories": [
+        "From Grok Bot Team",
+        "Marketing"
+      ],
+      "installCount": 0,
+      "color": "green",
+      "shape": "blob",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/971347ee-4462-4cec-906b-8479c7e6d8e8.png",
+      "addHref": "grokbot://app/v1/bot-template?id=qBFjPRQ3IbHG69qIFHblE",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/tally"
+    },
+    {
+      "id": "dan-lanning",
+      "name": "Partnerships Call Coach",
+      "creatorName": "Jenna Nanpei",
+      "handle": "jennananpei",
+      "description": "Pitch and delivery coach for partnership, sponsorship, and high-stakes discovery calls. Reviews real call transcripts and returns sharp, evidence-based coaching — what landed, what to tighten, and exact phrasing upgrades — so feedback compounds over time.",
+      "summary": "Pitch and delivery coach for partnership, sponsorship, and high-stakes discovery calls. Reviews real call transcripts and returns sharp, evidence-based coaching — what landed, what to tighten, and exact phrasing upgrades — so feedback compounds over time.",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "installCount": 0,
+      "color": "magenta",
+      "shape": "wedge",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/bbb48abb-eaf8-4f04-96e3-dc93d96ebb3f.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=PlsyvUb0KnHIQr6psoy0L",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/dan-lanning"
+    },
+    {
+      "id": "pipeline-health-and-forecast",
+      "name": "Pipeline Pulse",
+      "creatorName": "Krista Letz",
+      "handle": "kristaletz",
+      "description": "Scans your full pipeline for movement, stale next steps, forecast risk, and CRM gaps. Shows what changed across the book and drafts the updates needed to keep the forecast honest.",
+      "summary": "Scans your full pipeline for movement, stale next steps, forecast risk, and CRM gaps. Shows what changed across the book and drafts the updates needed to keep the forecast honest.",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "installCount": 0,
+      "color": "magenta",
+      "shape": "hex",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/31329e53-ca7f-4f1b-9c50-b0041a4def99.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=X-hZf_AreWNt-ZQPYs0Ev",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/pipeline-health-and-forecast"
+    },
+    {
+      "id": "pitch-deck-coach",
+      "name": "Pitch Deck Coach",
+      "creatorName": "Hiten Shah",
+      "handle": "hnshah",
+      "description": "Reviews a pitch deck and reports what an investor is likely to understand, believe, question, and remember, then helps strengthen the story, evidence, and slides.",
+      "summary": "Reviews a pitch deck and reports what an investor is likely to understand, believe, question, and remember, then helps strengthen the story, evidence, and slides.",
+      "categories": [
+        "Sales"
+      ],
+      "installCount": 0,
+      "color": "green",
+      "shape": "cloud",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/40f0711a-4c93-4ed5-9379-35d398b5ba9f.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=zkVS-PkX1ooTE2nP21DPO",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/pitch-deck-coach"
+    },
+    {
+      "id": "product-idea-stress-test",
+      "name": "Product Idea Stress Test",
+      "creatorName": "Hiten Shah",
+      "handle": "hnshah",
+      "description": "Investigates a product or startup idea for founders. Surfaces what has to be true, evidence for and against, the assumption most likely to kill it, and what to test next.",
+      "summary": "Investigates a product or startup idea for founders. Surfaces what has to be true, evidence for and against, the assumption most likely to kill it, and what to test next.",
+      "categories": [
+        "Product"
+      ],
+      "installCount": 0,
+      "color": "blue",
+      "shape": "squircle",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/40f0711a-4c93-4ed5-9379-35d398b5ba9f.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=ph-u_zkF5Vui1GdGnysn9",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/product-idea-stress-test"
+    },
+    {
+      "id": "customer-question-drafter",
+      "name": "Product Support Inbox Assistant",
+      "creatorName": "Anoop Baliga",
+      "handle": "akbaliga96",
+      "description": "Helps you find and draft answers to product questions. Never sends emails without you.",
+      "summary": "Helps you find and draft answers to product questions. Never sends emails without you.",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "installCount": 0,
+      "color": "red",
+      "shape": "shield",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/2a02dc68-da57-4194-90ce-b28e4b2135b9.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=Rw8d83KAzTYQWBAtAscin",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/customer-question-drafter"
+    },
+    {
+      "id": "projects-manager",
+      "name": "Projects Manager",
+      "creatorName": "Eric Zakariasson",
+      "handle": "ericzakariasson",
+      "description": "Runs your team's projects from Notion: one row per project, a channel per project, and tasks your specialist bots claim. You decide, agents execute, and it never does the specialist work itself.",
+      "summary": "Runs your team's projects from Notion: one row per project, a channel per project, and tasks your specialist bots claim. You decide, agents execute, and it never does the specialist work itself.",
+      "categories": [
+        "From Grok Bot Team",
+        "Engineering"
+      ],
+      "installCount": 0,
+      "color": "magenta",
+      "shape": "teardrop",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/632a54d5-8979-413a-b388-48fe88b2d2d3.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=AZKaQOsjrAa51Nb4xvTur",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/projects-manager"
+    },
+    {
+      "id": "mr-toms",
+      "name": "Recruiting Coordinator",
+      "creatorName": "Tommy Hansen",
+      "handle": "TommyHansenTA",
+      "description": "Schedules interview loops, preps your interviewers, and chases what's stalled. Works from your calendar or a pasted list, and never emails a candidate without you.",
+      "summary": "Schedules interview loops, preps your interviewers, and chases what's stalled. Works from your calendar or a pasted list, and never emails a candidate without you.",
+      "categories": [
+        "From Grok Bot Team",
+        "Recruiting & People"
+      ],
+      "installCount": 0,
+      "color": "red",
+      "shape": "teardrop",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/3c194063-9aa8-46e5-8007-382378bebd1b.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=KDahOjiDbbAvxqx9KaGcq",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/mr-toms"
+    },
+    {
+      "id": "researchy",
+      "name": "Researchy",
+      "creatorName": "Farzad",
+      "handle": "farzyness",
+      "description": "A research and fact-check desk that runs every pass on the latest Grok model with live web search. For anyone who needs sourced, dated claims instead of a training-only answer.",
+      "summary": "A research and fact-check desk that runs every pass on the latest Grok model with live web search. For anyone who needs sourced, dated claims instead of a training-only answer.",
+      "categories": [
+        "Engineering"
+      ],
+      "installCount": 0,
+      "color": "violet",
+      "shape": "cloud",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/55434980-66ae-4196-9e5a-ba6a4102d2b4.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=i2hvaEONDg6_gEF5C9RlK",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/researchy"
+    },
+    {
+      "id": "sales-call-coach",
+      "name": "Sales Call Coach",
+      "creatorName": "Daniel Brill",
+      "handle": "danielbrill_",
+      "description": "Scores your sales calls and tells you what to fix before the next one. Works from a pasted transcript or an uploaded recording.",
+      "summary": "Scores your sales calls and tells you what to fix before the next one. Works from a pasted transcript or an uploaded recording.",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "installCount": 0,
+      "color": "orange",
+      "shape": "shield",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/b27ce95a-6549-4d7c-8336-b11aa6d5e36b.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=yZ5MFQFdl32vHt6fcIJAc",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/sales-call-coach"
+    },
+    {
+      "id": "seo-aeo-desk",
+      "name": "SEO & AEO Desk",
+      "creatorName": "Adam Tanguay",
+      "handle": "adamta",
+      "description": "Turns your keywords into content ideas and writer-ready briefs for search and AI answers. Works from a pasted keyword list or your Search Console.",
+      "summary": "Turns your keywords into content ideas and writer-ready briefs for search and AI answers. Works from a pasted keyword list or your Search Console.",
+      "categories": [
+        "From Grok Bot Team",
+        "Marketing"
+      ],
+      "installCount": 0,
+      "color": "green",
+      "shape": "hex",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/f608b717-4f3c-4ff4-993c-86941e8ece5c.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=0IhyZWxwbf2cFmsmroZQL",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/seo-aeo-desk"
+    },
+    {
+      "id": "site-audit",
+      "name": "Site Audit",
+      "creatorName": "Shimecki",
+      "handle": "scheemunai",
+      "description": "SEO + content + speed + a11y + CRO + schema audit. Scored, P0/P1/P2, evidence URLs. Monthly diff. No invented metrics.",
+      "summary": "SEO + content + speed + a11y + CRO + schema audit. Scored, P0/P1/P2, evidence URLs. Monthly diff. No invented metrics.",
+      "categories": [
+        "Marketing"
+      ],
+      "installCount": 0,
+      "color": "yellow",
+      "shape": "hex",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/666f7d42-2844-4012-9a1a-4388ec4fc1af.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=_rzRrKKlUyBD3znUN5b3Q",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/site-audit"
+    },
+    {
+      "id": "skippy",
+      "name": "skippy",
+      "creatorName": "Matt Palmer",
+      "handle": "mattyp",
+      "description": "A San Francisco street-cleaning assistant. Paste a Maps pin, address, or intersection and it tells you the next posted sweep on that curb. Uses public city data. Never claims a stall is legal.",
+      "summary": "A San Francisco street-cleaning assistant. Paste a Maps pin, address, or intersection and it tells you the next posted sweep on that curb. Uses public city data. Never claims a stall is legal.",
+      "categories": [
+        "From Grok Bot Team",
+        "Personal"
+      ],
+      "installCount": 0,
+      "color": "orange",
+      "shape": "egg",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/280ad7d6-531b-47ba-a6eb-421f89971a81.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=X4NHZvN9cvBBS5EgdjsLx",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/skippy"
+    },
+    {
+      "id": "image-gen-bot",
+      "name": "Stills & Clips Desk",
+      "creatorName": "Matt Palmer",
+      "handle": "mattyp",
+      "description": "Pulls stills, thumbnails, and short clips out of your footage, sized for where they go. Cleans up screenshots for docs too, and writes the caption and alt text.",
+      "summary": "Pulls stills, thumbnails, and short clips out of your footage, sized for where they go. Cleans up screenshots for docs too, and writes the caption and alt text.",
+      "categories": [
+        "From Grok Bot Team",
+        "Marketing"
+      ],
+      "installCount": 0,
+      "color": "magenta",
+      "shape": "cylinder",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/280ad7d6-531b-47ba-a6eb-421f89971a81.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=V8XugyLxzbQXLM9o5b3B-",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/image-gen-bot"
+    },
+    {
+      "id": "sherlock",
+      "name": "Talent Discovery",
+      "creatorName": "Tommy Hansen",
+      "handle": "TommyHansenTA",
+      "description": "Finds candidates for open roles that match your criteria and aren't already in your ATS.",
+      "summary": "Finds candidates for open roles that match your criteria and aren't already in your ATS.",
+      "categories": [
+        "From Grok Bot Team",
+        "Recruiting & People"
+      ],
+      "installCount": 0,
+      "color": "yellow",
+      "shape": "dome",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/3c194063-9aa8-46e5-8007-382378bebd1b.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=vIX2YW6rr6nQnf8-Rhyzc",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/sherlock"
+    },
+    {
+      "id": "tech-demos",
+      "name": "Tech Demos",
+      "creatorName": "Matt Palmer",
+      "handle": "mattyp",
+      "description": "Weekday X-bookmark scout that picks one new library to demo, asks for approval, then plans and builds it in a sticky monorepo with a Cursor cloud agent. For anyone who wants a daily public-tech playground, not a changelog digest.",
+      "summary": "Weekday X-bookmark scout that picks one new library to demo, asks for approval, then plans and builds it in a sticky monorepo with a Cursor cloud agent. For anyone who wants a daily public-tech playground, not a changelog digest.",
+      "categories": [
+        "From Grok Bot Team",
+        "Personal"
+      ],
+      "installCount": 0,
+      "color": "violet",
+      "shape": "gem",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/280ad7d6-531b-47ba-a6eb-421f89971a81.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=PaYvPhWPSynlUwFqMX7nc",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/tech-demos"
+    },
+    {
+      "id": "the-morning-newspaper",
+      "name": "The Morning Newspaper",
+      "creatorName": "Karen X. Cheng",
+      "handle": "karenxcheng",
+      "description": "A newspaper customized to you. It pulls from your email and calendar, lays it out for you, and prints while you sleep. Created by @karenxcheng",
+      "summary": "A newspaper customized to you. It pulls from your email and calendar, lays it out for you, and prints while you sleep. Created by @karenxcheng",
+      "categories": [
+        "Personal"
+      ],
+      "installCount": 0,
+      "color": "violet",
+      "shape": "blob",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/bfb07c07-658c-445a-9940-238b88ae23e9.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=1xAJYJPes3X7dUM2mk9Di",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/the-morning-newspaper"
+    },
+    {
+      "id": "tinkabot",
+      "name": "tinkabot",
+      "creatorName": "Lauren Tan",
+      "handle": "poteto",
+      "description": "Wraps an API into a Cursor/Agent Plugin (MCP + skills). Data shape first, smallest scaffold that works, prove locally, then ask once for affiliation and publish to Marketplace or cursor.directory.",
+      "summary": "Wraps an API into a Cursor/Agent Plugin (MCP + skills). Data shape first, smallest scaffold that works, prove locally, then ask once for affiliation and publish to Marketplace or cursor.directory.",
+      "categories": [
+        "From Grok Bot Team",
+        "Engineering"
+      ],
+      "installCount": 0,
+      "color": "blue",
+      "shape": "hex",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/8172289b-4cc4-4d64-bed4-783080233ba3.png",
+      "addHref": "grokbot://app/v1/bot-template?id=-hmCmHB0ynJGvSKxeINfS",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/tinkabot"
+    },
+    {
+      "id": "tradbot-2",
+      "name": "Tradbot",
+      "creatorName": "Claire Vo",
+      "handle": "clairevo",
+      "description": "Watches your personal email and calendar so school forms, bills, and RSVPs don't slip. Drafts the reply, catches the pickup clash, and never sends without you.",
+      "summary": "Watches your personal email and calendar so school forms, bills, and RSVPs don't slip. Drafts the reply, catches the pickup clash, and never sends without you.",
+      "categories": [],
+      "installCount": 0,
+      "color": "violet",
+      "shape": "squircle",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/6154b239-9a01-4146-8736-4fccc772b2d9.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=wOE4e95HNxhSbrzyLkSI-",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/tradbot-2"
+    },
+    {
+      "id": "best-video-editor",
+      "name": "Video Edit Desk",
+      "creatorName": "X Freeze",
+      "handle": "xfreeze",
+      "description": "Turns uploaded footage into cut clips, burned-in captions, and platform-sized exports. Works from your notes and never overwrites the original.",
+      "summary": "Turns uploaded footage into cut clips, burned-in captions, and platform-sized exports. Works from your notes and never overwrites the original.",
+      "categories": [
+        "Marketing"
+      ],
+      "installCount": 0,
+      "color": "magenta",
+      "shape": "pebble",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/b87feb6a-49d3-4bf0-9374-8eec23e1d6ba.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=kGiyk73f5CF8XtBMIh0gW",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/best-video-editor"
+    },
+    {
+      "id": "webby",
+      "name": "Webby",
+      "creatorName": "Farzad",
+      "handle": "farzyness",
+      "description": "Website admin. Owns a personal site (rebuild + live fallback, exclusive long-form and newsletter) and a public weekday dashboard. Also owns newsletter sends: exclusive the same day a new piece ships; digest the next morning after that day's social pulse is finished. Create-only, no deletes. Strip AI-isms. Cost-lean. An orchestrator routes; this bot ships.",
+      "summary": "Website admin. Owns a personal site (rebuild + live fallback, exclusive long-form and newsletter) and a public weekday dashboard. Also owns newsletter sends: exclusive the same day a new piece ships; digest the next morning after that day's social pulse is finished. Create-only, no deletes. Strip AI-isms. Cost-lean. An orchestrator routes; this bot ships.",
+      "categories": [
+        "Personal"
+      ],
+      "installCount": 0,
+      "color": "brown",
+      "shape": "squircle",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/55434980-66ae-4196-9e5a-ba6a4102d2b4.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=BX4-kOUI2CzphgiYLZ1hb",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/webby"
+    },
+    {
+      "id": "writing-bot",
+      "name": "Writing Bot",
+      "creatorName": "Matt Palmer",
+      "handle": "mattyp",
+      "description": "A writing partner for drafting and revising essays, emails, docs, and other prose. It uses a structured revision workflow so the result is clearer and better organized while keeping the writer's meaning, facts, and voice.",
+      "summary": "A writing partner for drafting and revising essays, emails, docs, and other prose. It uses a structured revision workflow so the result is clearer and better organized while keeping the writer's meaning, facts, and voice.",
+      "categories": [
+        "From Grok Bot Team",
+        "Marketing"
+      ],
+      "installCount": 0,
+      "color": "cyan",
+      "shape": "squircle",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/280ad7d6-531b-47ba-a6eb-421f89971a81.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=wtq-j01kD7o8gQFx7E9zv",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/writing-bot"
+    },
+    {
+      "id": "wtd",
+      "name": "WTD",
+      "creatorName": "Jenna Nanpei",
+      "handle": "jennananpei",
+      "description": "WTD is a VIP hospitality planning partner for marketing ops — project-plan and status rhythm across tentpoles and ticket banks, nomination-sheet tracking, marketing-visible status hubs, and decks or agendas. Sales owns guest inviting; this bot keeps the plan and status clean without dumping private notes onto shared pages.",
+      "summary": "WTD is a VIP hospitality planning partner for marketing ops — project-plan and status rhythm across tentpoles and ticket banks, nomination-sheet tracking, marketing-visible status hubs, and decks or agendas. Sales owns guest inviting; this bot keeps the plan and status clean without dumping private notes onto shared pages.",
+      "categories": [
+        "From Grok Bot Team",
+        "Marketing"
+      ],
+      "installCount": 0,
+      "color": "red",
+      "shape": "tablet",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/bbb48abb-eaf8-4f04-96e3-dc93d96ebb3f.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=Q3VCc_x0Y8lWd4m-rung2",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/wtd"
+    },
+    {
+      "id": "x-brief",
+      "name": "X Brief",
+      "creatorName": "Dan McAteer",
+      "handle": "daniel_mac8",
+      "description": "Turns the accounts and topics you pick on X into one short daily brief. Reads your X connection or handles you paste, and never posts on your behalf.",
+      "summary": "Turns the accounts and topics you pick on X into one short daily brief. Reads your X connection or handles you paste, and never posts on your behalf.",
+      "categories": [
+        "Marketing"
+      ],
+      "installCount": 0,
+      "color": "black",
+      "shape": "cloud",
+      "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/3eb6a61f-3ff4-4db4-a510-db19f39463e5.jpg",
+      "addHref": "grokbot://app/v1/bot-template?id=RO8GwQZFXL9O95i13epqF",
+      "marketplaceUrl": "https://x.ai/bot/marketplace/bots/x-brief"
+    }
+  ]
+}
