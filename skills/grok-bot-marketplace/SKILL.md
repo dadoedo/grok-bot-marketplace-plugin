@@ -18,6 +18,7 @@ Help the user browse the public [Grok Bot marketplace](https://x.ai/bot/marketpl
 2. **Install is a deep link.** Each bot has `addHref` like `grokbot://app/v1/bot-template?id=…`. Return `addHref` and `marketplaceUrl`. Tell the user to open those in Grok Bot (or the marketplace page).
 3. **Catalog source.** Live data is SSR HTML at `https://x.ai/bot/marketplace` (`#marketplace-catalog`). A checked-in snapshot lives at `data/catalog.json`. Prefer the snapshot; refresh only when asked or when the snapshot is missing/stale.
 4. **Do not block on X / Twitter.** This skill does not search X.
+5. **`installCount` is non-signal today.** Marketplace SSR currently ships `installCount: 0` for every public bot. Still return the field. Do not call bots unused, unpopular, or "low installs" and do not rank by `installCount` until non-zero values appear.
 
 ## When to use
 
@@ -73,7 +74,7 @@ Every bot you present MUST include:
 | `creator` | catalog `creatorName` |
 | `description` | `summary` or `description` |
 | `categories` | catalog `categories` |
-| `installCount` | include when present (may be `0` or unknown) |
+| `installCount` | include when present. Marketplace SSR currently sends `0` for all bots — return it, but treat `0` as non-signal (not "unused") until non-zero values appear |
 | `marketplaceUrl` | `https://x.ai/bot/marketplace/bots/{id}` |
 | `addHref` | `grokbot://…` install deep link |
 
@@ -98,5 +99,5 @@ Detail pages use the same bot object and may fill `instructions`, `memories`, `s
 User: "Find a Grok Bot for outbound sales."
 
 1. Run `python3 scripts/catalog.py search "outbound" --category Sales` (or search without category if unsure).
-2. Show matching cards with creator, description, categories, installCount, marketplace URL, addHref.
+2. Show matching cards with creator, description, categories, installCount, marketplace URL, addHref. If `installCount` is `0`, do not describe the bot as unused.
 3. Offer to compare the top 2–3 with `--details` if they want a closer look.

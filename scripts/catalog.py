@@ -327,11 +327,17 @@ def filter_bots(
     results = bots
     if category:
         needle = category.strip().lower()
-        results = [
-            b
-            for b in results
-            if any(needle == c.lower() or needle in c.lower() for c in (b.get("categories") or []))
-        ]
+        if needle:
+            exact = [
+                b
+                for b in results
+                if any(needle == c.lower() for c in (b.get("categories") or []))
+            ]
+            results = exact or [
+                b
+                for b in results
+                if any(needle in c.lower() for c in (b.get("categories") or []))
+            ]
     if query:
         tokens = [t for t in query.lower().split() if t]
         results = [b for b in results if all(tok in _haystack(b) for tok in tokens)]
@@ -568,7 +574,10 @@ def build_parser() -> argparse.ArgumentParser:
     sub = parser.add_subparsers(dest="command", required=True)
 
     p_list = sub.add_parser("list", parents=[shared], help="List bots from the snapshot")
-    p_list.add_argument("--category", help="Filter by category name (substring, case-insensitive)")
+    p_list.add_argument(
+        "--category",
+        help="Filter by category (case-insensitive exact match, then substring fallback)",
+    )
     p_list.add_argument("--limit", type=int, default=None)
     p_list.add_argument("--sort", choices=("name", "installs"), default="name")
     p_list.add_argument("--with-categories", action="store_true", help="Include category counts")
@@ -580,7 +589,10 @@ def build_parser() -> argparse.ArgumentParser:
         help="Search by keyword (name, creator, description, category)",
     )
     p_search.add_argument("query")
-    p_search.add_argument("--category", help="Also filter by category")
+    p_search.add_argument(
+        "--category",
+        help="Also filter by category (exact match first, then substring)",
+    )
     p_search.add_argument("--limit", type=int, default=None)
     p_search.add_argument("--sort", choices=("name", "installs"), default="name")
     p_search.set_defaults(func=cmd_search)

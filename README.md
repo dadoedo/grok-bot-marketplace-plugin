@@ -9,7 +9,7 @@ Weekend-sized MVP: visibility into the catalog before Cursor ships an official b
 - Lists public Grok Bots from the marketplace catalog
 - Searches / filters by keyword or category
 - Compares a few bots
-- Always returns **name**, **creator**, **description**, **categories**, **installCount** (when present), **marketplace URL**, and **addHref**
+- Always returns **name**, **creator**, **description**, **categories**, **installCount** (when present), **marketplace URL**, and **addHref**. Marketplace SSR currently ships `installCount: 0` for every public bot — returning `0` is honest; do not treat it as "unused" or rank by popularity until non-zero values appear.
 
 ## Honesty: install is not an API
 
@@ -26,6 +26,8 @@ Skills and the CLI return that `addHref` plus `https://x.ai/bot/marketplace/bots
 ## Catalog source
 
 The marketplace page at [https://x.ai/bot/marketplace](https://x.ai/bot/marketplace) (`#marketplace-catalog`) is SSR HTML. The full public catalog is embedded in the page payload (`templates[]`: `id`, `name`, `creatorName`, `handle`, `description` / `summary`, `categories`, `color`, `shape`, `imageUrl`, `installCount`, `addHref`).
+
+**`installCount` is currently non-signal.** The live page embeds `installCount: 0` for all bots. The CLI still returns that field. Do not infer popularity, unused-ness, or sort quality from zeros until the marketplace starts shipping non-zero counts.
 
 A checked-in snapshot lives at [`data/catalog.json`](data/catalog.json). Agents should use it by default. Re-fetch when you want a live refresh:
 

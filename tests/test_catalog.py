@@ -54,6 +54,21 @@ SAMPLE_BOTS = [
         "routines": [],
         "integrations": [],
     },
+    {
+        "id": "eng-ops",
+        "name": "Eng Ops",
+        "creatorName": "Casey",
+        "handle": "casey",
+        "description": "Keeps engineering ops tidy.",
+        "summary": "Keeps engineering ops tidy.",
+        "categories": ["Engineering Ops"],
+        "installCount": 3,
+        "color": "green",
+        "shape": "circle",
+        "addHref": "grokbot://app/v1/bot-template?id=ops789",
+        "imageUrl": "https://example.com/casey.png",
+        "instructions": "",
+    },
 ]
 
 
@@ -66,7 +81,7 @@ class CatalogParseTests(unittest.TestCase):
         pretty = json.dumps({"featured": {"bots": []}, "templates": SAMPLE_BOTS})
         for payload in (compact, pretty):
             templates = catalog.parse_templates(flight_html(payload))
-            self.assertEqual(len(templates), 2)
+            self.assertEqual(len(templates), 3)
             self.assertEqual(templates[0]["id"], "seo-desk")
             self.assertTrue(templates[0]["addHref"].startswith("grokbot://"))
 
@@ -79,6 +94,17 @@ class CatalogParseTests(unittest.TestCase):
     def test_missing_payload_errors(self):
         with self.assertRaises(catalog.CatalogError):
             catalog.parse_templates("<html><body>no catalog</body></html>")
+
+    def test_parse_real_next_f_fixture_offline(self):
+        fixture = ROOT / "tests" / "fixtures" / "marketplace-next-f.html"
+        html = fixture.read_text(encoding="utf-8")
+        templates = catalog.parse_templates(html)
+        self.assertGreaterEqual(len(templates), 1)
+        hrefs = [t.get("addHref") or "" for t in templates]
+        self.assertTrue(any(h.startswith("grokbot://") for h in hrefs))
+        self.assertIn("self.__next_f.push", html)
+        self.assertIn("templates", html)
+        self.assertIn("grokbot://", html)
 
 
 class CatalogQueryTests(unittest.TestCase):
@@ -107,6 +133,8 @@ class CatalogQueryTests(unittest.TestCase):
         self.assertEqual([b["id"] for b in hits], ["seo-desk"])
         hits = catalog.filter_bots(self.bots, category="engineering")
         self.assertEqual([b["id"] for b in hits], ["researchy"])
+        hits = catalog.filter_bots(self.bots, category="ops")
+        self.assertEqual([b["id"] for b in hits], ["eng-ops"])
 
     def test_compare_resolves_name_and_id(self):
         found, missing = catalog.find_bots(self.bots, ["SEO Desk", "researchy"])
@@ -120,7 +148,7 @@ class CatalogQueryTests(unittest.TestCase):
 
     def test_snapshot_roundtrip(self):
         document = catalog.build_catalog_document(SAMPLE_BOTS, fetched_at="2026-09-05T00:00:00Z")
-        self.assertEqual(document["botCount"], 2)
+        self.assertEqual(document["botCount"], 3)
         self.assertEqual(document["install"]["method"], "grokbot-deeplink")
         self.assertTrue(any(c["name"] == "Marketing" for c in document["categories"]))
         cards = [catalog.public_card(b) for b in document["bots"]]
@@ -212,6 +240,22 @@ class CatalogCliTests(unittest.TestCase):
         payload = json.loads(buf.getvalue())
         self.assertIn("results", payload)
         self.assertEqual(payload.get("query"), "outbound")
+
+
+class RefreshWrapperTests(unittest.TestCase):
+    def test_ignores_redundant_leading_refresh_arg(self):
+        import importlib.util
+
+        path = ROOT / "scripts" / "refresh-catalog.py"
+        spec = importlib.util.spec_from_file_location("refresh_catalog", path)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        self.assertEqual(mod.extra_args(["refresh-catalog.py"]), [])
+        self.assertEqual(mod.extra_args(["refresh-catalog.py", "--list"]), ["--list"])
+        self.assertEqual(
+            mod.extra_args(["refresh-catalog.py", "refresh", "--format", "json"]),
+            ["--format", "json"],
+        )
 
 
 if __name__ == "__main__":
