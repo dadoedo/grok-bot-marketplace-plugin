@@ -92,6 +92,13 @@ class CatalogQueryTests(unittest.TestCase):
         card = catalog.public_card(bot)
         self.assertEqual(card["creator"], "Ada Lovelace")
         self.assertEqual(card["installCount"], 12)
+        for field in catalog.CARD_FIELDS:
+            self.assertIn(field, card)
+        self.assertIsInstance(card["name"], str)
+        self.assertIsInstance(card["creator"], str)
+        self.assertIsInstance(card["description"], str)
+        self.assertIsInstance(card["addHref"], str)
+        self.assertIsInstance(card["marketplaceUrl"], str)
         self.assertIn("marketplaceUrl", card)
         self.assertIn("addHref", card)
 
@@ -118,6 +125,17 @@ class CatalogQueryTests(unittest.TestCase):
         self.assertTrue(any(c["name"] == "Marketing" for c in document["categories"]))
         cards = [catalog.public_card(b) for b in document["bots"]]
         self.assertTrue(all(c["addHref"].startswith("grokbot://") for c in cards))
+        for card in cards:
+            for field in (
+                "name",
+                "creator",
+                "description",
+                "addHref",
+                "marketplaceUrl",
+            ):
+                self.assertIn(field, card)
+                self.assertIsInstance(card[field], str)
+                self.assertTrue(card[field])
 
 
 class CatalogCliTests(unittest.TestCase):
@@ -155,6 +173,45 @@ class CatalogCliTests(unittest.TestCase):
         for bot in payload["results"]:
             self.assertTrue(bot["addHref"].startswith("grokbot://"))
             self.assertTrue(bot["marketplaceUrl"].startswith("https://x.ai/bot/marketplace/bots/"))
+            for field in ("name", "creator", "description", "addHref", "marketplaceUrl"):
+                self.assertIn(field, bot)
+                self.assertTrue(bot[field])
+
+    def test_format_flag_after_subcommand(self):
+        snapshot = ROOT / "data" / "catalog.json"
+        if not snapshot.is_file():
+            self.skipTest("checked-in catalog snapshot missing")
+        from io import StringIO
+        from contextlib import redirect_stdout
+
+        buf = StringIO()
+        with redirect_stdout(buf):
+            code = catalog.main(
+                ["search", "outbound", "--format", "text", "--catalog", str(snapshot)]
+            )
+        self.assertEqual(code, 0)
+        text = buf.getvalue()
+        self.assertIn("addHref:", text)
+        self.assertIn("marketplace:", text)
+        self.assertIn("grokbot://", text)
+        self.assertTrue(text.startswith("Source:"))
+
+    def test_format_flag_before_subcommand_still_works(self):
+        snapshot = ROOT / "data" / "catalog.json"
+        if not snapshot.is_file():
+            self.skipTest("checked-in catalog snapshot missing")
+        from io import StringIO
+        from contextlib import redirect_stdout
+
+        buf = StringIO()
+        with redirect_stdout(buf):
+            code = catalog.main(
+                ["--catalog", str(snapshot), "--format", "json", "search", "outbound"]
+            )
+        self.assertEqual(code, 0)
+        payload = json.loads(buf.getvalue())
+        self.assertIn("results", payload)
+        self.assertEqual(payload.get("query"), "outbound")
 
 
 if __name__ == "__main__":

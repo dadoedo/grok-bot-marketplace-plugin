@@ -36,9 +36,12 @@ Work from the **plugin root** (the directory that contains `plugin.json`).
 python3 scripts/catalog.py list --with-categories
 python3 scripts/catalog.py list --category Engineering
 python3 scripts/catalog.py search "seo brief"
+python3 scripts/catalog.py search "outbound" --format text
 python3 scripts/catalog.py categories
-python3 scripts/catalog.py show researchy
+python3 scripts/catalog.py show researchy --format text
 ```
+
+Default `--format` is `json`. Put `--format text` after the subcommand when you want a readable dump.
 
 If you cannot run Python, read `data/catalog.json` and filter it yourself.
 

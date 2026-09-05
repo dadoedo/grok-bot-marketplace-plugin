@@ -207,18 +207,32 @@ def _summarize_named(items: Iterable[Any], text_key: str, limit: int = 400) -> l
     return out
 
 
+CARD_FIELDS = (
+    "id",
+    "name",
+    "creator",
+    "handle",
+    "description",
+    "categories",
+    "installCount",
+    "marketplaceUrl",
+    "addHref",
+)
+
+
 def public_card(bot: dict[str, Any]) -> dict[str, Any]:
     """Fields skills/tools must return for list/search/compare."""
+    bot_id = str(bot.get("id") or "")
     card = {
-        "id": bot.get("id"),
-        "name": bot.get("name"),
-        "creator": bot.get("creatorName"),
-        "handle": bot.get("handle"),
-        "description": bot.get("summary") or bot.get("description"),
-        "categories": bot.get("categories") or [],
+        "id": bot_id,
+        "name": str(bot.get("name") or ""),
+        "creator": str(bot.get("creatorName") or ""),
+        "handle": str(bot.get("handle") or ""),
+        "description": str(bot.get("summary") or bot.get("description") or ""),
+        "categories": list(bot.get("categories") or []),
         "installCount": bot.get("installCount"),
-        "marketplaceUrl": bot.get("marketplaceUrl") or marketplace_url_for(str(bot.get("id") or "")),
-        "addHref": bot.get("addHref") or "",
+        "marketplaceUrl": str(bot.get("marketplaceUrl") or marketplace_url_for(bot_id)),
+        "addHref": str(bot.get("addHref") or ""),
     }
     for key in DETAIL_LIST_FIELDS:
         if key in bot:
@@ -527,42 +541,58 @@ def _emit(payload: dict[str, Any], fmt: str) -> None:
     print_json(payload)
 
 
-def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
-        description="List, search, and compare Grok Bot marketplace templates. "
-        "Install is via grokbot:// addHref only — no REST install API.",
-    )
-    parser.add_argument(
+def _shared_cli_flags() -> argparse.ArgumentParser:
+    """Flags that work before or after the subcommand (argparse parents)."""
+    shared = argparse.ArgumentParser(add_help=False)
+    shared.add_argument(
         "--catalog",
         default=str(DEFAULT_CATALOG_PATH),
         help="Path to catalog snapshot JSON (default: data/catalog.json)",
     )
-    parser.add_argument(
+    shared.add_argument(
         "--format",
         choices=("json", "text"),
         default="json",
-        help="Output format (json for agents, text for humans)",
+        help="Output format (json for agents, text for humans). Default: json.",
+    )
+    return shared
+
+
+def build_parser() -> argparse.ArgumentParser:
+    shared = _shared_cli_flags()
+    parser = argparse.ArgumentParser(
+        description="List, search, and compare Grok Bot marketplace templates. "
+        "Install is via grokbot:// addHref only — no REST install API.",
+        parents=[shared],
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
-    p_list = sub.add_parser("list", help="List bots from the snapshot")
+    p_list = sub.add_parser("list", parents=[shared], help="List bots from the snapshot")
     p_list.add_argument("--category", help="Filter by category name (substring, case-insensitive)")
     p_list.add_argument("--limit", type=int, default=None)
     p_list.add_argument("--sort", choices=("name", "installs"), default="name")
     p_list.add_argument("--with-categories", action="store_true", help="Include category counts")
     p_list.set_defaults(func=cmd_list)
 
-    p_search = sub.add_parser("search", help="Search by keyword (name, creator, description, category)")
+    p_search = sub.add_parser(
+        "search",
+        parents=[shared],
+        help="Search by keyword (name, creator, description, category)",
+    )
     p_search.add_argument("query")
     p_search.add_argument("--category", help="Also filter by category")
     p_search.add_argument("--limit", type=int, default=None)
     p_search.add_argument("--sort", choices=("name", "installs"), default="name")
     p_search.set_defaults(func=cmd_search)
 
-    p_cats = sub.add_parser("categories", help="List category names and counts")
+    p_cats = sub.add_parser("categories", parents=[shared], help="List category names and counts")
     p_cats.set_defaults(func=cmd_categories)
 
-    p_show = sub.add_parser("show", help="Show one or more bots by id, name, or handle")
+    p_show = sub.add_parser(
+        "show",
+        parents=[shared],
+        help="Show one or more bots by id, name, or handle",
+    )
     p_show.add_argument("ids", nargs="+")
     p_show.add_argument(
         "--details",
@@ -571,7 +601,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_show.set_defaults(func=cmd_show)
 
-    p_cmp = sub.add_parser("compare", help="Compare a few bots side by side")
+    p_cmp = sub.add_parser("compare", parents=[shared], help="Compare a few bots side by side")
     p_cmp.add_argument("ids", nargs="+")
     p_cmp.add_argument(
         "--details",
@@ -580,7 +610,11 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_cmp.set_defaults(func=cmd_compare)
 
-    p_refresh = sub.add_parser("refresh", help="Fetch live marketplace HTML and rewrite data/catalog.json")
+    p_refresh = sub.add_parser(
+        "refresh",
+        parents=[shared],
+        help="Fetch live marketplace HTML and rewrite data/catalog.json",
+    )
     p_refresh.add_argument(
         "--list",
         action="store_true",

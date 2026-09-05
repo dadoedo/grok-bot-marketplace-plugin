@@ -84,21 +84,22 @@ python3 scripts/catalog.py list --with-categories
 python3 scripts/catalog.py search "outbound" --category Sales
 python3 scripts/catalog.py compare researchy tinkabot --details
 python3 scripts/catalog.py show dr-eggbot-v2 --format text
+python3 scripts/catalog.py search "outbound" --format text
 ```
 
-`--format json` is the default (agent-friendly). Use `--format text` for a readable dump.
+`--format json` is the default (agent-friendly). Put `--format text` after the subcommand for a readable dump (`--format` also works before the subcommand).
 
 If Python cannot run, read `data/catalog.json` and filter in-context. Still return `addHref` + `marketplaceUrl`. Never invent an install API.
 
 ## CLI
 
 ```bash
-python3 scripts/catalog.py list [--category NAME] [--limit N] [--sort name|installs]
-python3 scripts/catalog.py search QUERY [--category NAME]
-python3 scripts/catalog.py categories
-python3 scripts/catalog.py show ID_OR_NAME... [--details]
-python3 scripts/catalog.py compare ID_OR_NAME... [--details]
-python3 scripts/catalog.py refresh
+python3 scripts/catalog.py list [--category NAME] [--limit N] [--sort name|installs] [--format json|text]
+python3 scripts/catalog.py search QUERY [--category NAME] [--format json|text]
+python3 scripts/catalog.py categories [--format json|text]
+python3 scripts/catalog.py show ID_OR_NAME... [--details] [--format json|text]
+python3 scripts/catalog.py compare ID_OR_NAME... [--details] [--format json|text]
+python3 scripts/catalog.py refresh [--format json|text]
 ```
 
 ```bash
