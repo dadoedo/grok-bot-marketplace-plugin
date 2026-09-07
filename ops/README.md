@@ -16,6 +16,8 @@ Host stredan-cursor-hetzner-prod
 
 Suggested install path on the box: `~/grokbots` (clone or rsync this repo).
 
+This agent synced `ops/`, `scripts/`, and `data/` to `~/grokbots` on `stredan-cursor-agent@46.224.84.45` (`ubuntu-8gb-nbg1-1`). Crontab is installed with `SKIP_PUBLISH=1` (marketplace/X refresh only, no R2 upload until Cloudflare tokens exist). `~/grokbots/.env` is a 600-mode stub from `ops/env.example` — **Bearer is not on the box**. Drop `X_BEARER_TOKEN` there when the X App is on a Project. Do not use the Grok Bot agent box as the cron host.
+
 ## Refresh
 
 ```bash
