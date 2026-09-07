@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="XBots mark">
+  <!-- BRAND SWAP: update aria-label when the working title changes -->
+  <rect width="128" height="128" rx="28" fill="#08080a"/>
+  <rect x="14" y="14" width="100" height="100" rx="22" fill="#121218" stroke="#c9a227" stroke-width="3"/>
+  <circle cx="50" cy="52" r="7.5" fill="#f4ead4"/>
+  <circle cx="78" cy="52" r="7.5" fill="#f4ead4"/>
+  <path d="M46 72c6 8 30 8 36 0" fill="none" stroke="#c9a227" stroke-width="4" stroke-linecap="round"/>
+  <rect x="28" y="92" width="20" height="12" rx="3" fill="#c9a227" opacity="0.9"/>
+  <rect x="54" y="92" width="20" height="12" rx="3" fill="#7dffa6" opacity="0.85"/>
+  <rect x="80" y="92" width="20" height="12" rx="3" fill="#c9a227" opacity="0.45"/>
+</svg>

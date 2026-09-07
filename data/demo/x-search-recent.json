@@ -1,0 +1,102 @@
+{
+  "data": [
+    {
+      "id": "1987654321098765432",
+      "text": "Shipped Researchy on the Grok Bot marketplace https://x.ai/bot/marketplace/bots/researchy grokbot://app/v1/bot-template?id=res456",
+      "created_at": "2026-09-05T08:00:00.000Z",
+      "author_id": "111",
+      "lang": "en",
+      "public_metrics": {
+        "retweet_count": 12,
+        "reply_count": 3,
+        "like_count": 84,
+        "quote_count": 2,
+        "bookmark_count": 7
+      },
+      "entities": {
+        "urls": [
+          {
+            "url": "https://t.co/abc",
+            "expanded_url": "https://x.ai/bot/marketplace/bots/researchy",
+            "display_url": "x.ai/bot/marketplace/bots/researchy",
+            "unwound_url": "https://x.ai/bot/marketplace/bots/researchy"
+          }
+        ]
+      }
+    },
+    {
+      "id": "1987654321098765431",
+      "text": "New Grok Bot template share (not in the public catalog yet) https://x.ai/bot/marketplace/bots/unlisted-demo",
+      "created_at": "2026-09-05T07:30:00.000Z",
+      "author_id": "222",
+      "lang": "en",
+      "public_metrics": {
+        "retweet_count": 1,
+        "reply_count": 0,
+        "like_count": 4,
+        "quote_count": 0
+      },
+      "entities": {
+        "urls": [
+          {
+            "url": "https://t.co/def",
+            "expanded_url": "https://x.ai/bot/marketplace/bots/unlisted-demo",
+            "display_url": "x.ai/bot/marketplace/bots/unlisted-demo"
+          }
+        ]
+      }
+    },
+    {
+      "id": "1987654321098765430",
+      "text": "Browse the Grok Bot marketplace https://x.ai/bot/marketplace and this scrubbed share https://x.ai/bot/marketplace/share/bot-template?id=share99 grokbot://app/v1/bot-template?id=share99&utm=demo",
+      "created_at": "2026-09-05T07:00:00.000Z",
+      "author_id": "333",
+      "lang": "en",
+      "public_metrics": {
+        "retweet_count": 40,
+        "reply_count": 8,
+        "like_count": 200,
+        "quote_count": 11,
+        "bookmark_count": 22
+      },
+      "entities": {
+        "urls": [
+          {
+            "url": "https://t.co/ghi",
+            "expanded_url": "https://x.ai/bot/marketplace",
+            "display_url": "x.ai/bot/marketplace"
+          },
+          {
+            "url": "https://t.co/jkl",
+            "expanded_url": "https://x.ai/bot/marketplace/share/bot-template?id=share99",
+            "display_url": "x.ai/bot/marketplace/share/bot-template?id=share99"
+          }
+        ]
+      }
+    }
+  ],
+  "includes": {
+    "users": [
+      {
+        "id": "111",
+        "name": "Farzad",
+        "username": "farzyness"
+      },
+      {
+        "id": "222",
+        "name": "Demo User",
+        "username": "demobot"
+      },
+      {
+        "id": "333",
+        "name": "Viral Share",
+        "username": "viralshare"
+      }
+    ]
+  },
+  "meta": {
+    "newest_id": "1987654321098765432",
+    "oldest_id": "1987654321098765430",
+    "result_count": 3
+  }
+}
