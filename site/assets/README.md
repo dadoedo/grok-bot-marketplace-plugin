@@ -1,6 +1,6 @@
 # Site assets
 
-Working brand is **XBots** (`xbots.so`). Chrome uses `logo.png`. The **hero is live marketplace cards** from `catalog.json` (real S3 `imageUrl` + SVG shape masks) — not `hero.png`.
+Working brand is **XBots** (`grokbots.store`). Chrome uses `logo.png`. The **hero is live marketplace cards** from `catalog.json` (real S3 `imageUrl` + SVG shape masks) — not `hero.png`.
 
 | File | Use |
 | --- | --- |

@@ -2,7 +2,7 @@
 
 Static marketing page for the **Grok Bot Marketplace Plugin**.
 
-Working title **XBots** / **xbots.so** is temporary (`xbots.io` is taken — do not claim it). Swap-friendly: search `data-brand`, `.brand-name`, `.brand-domain` in `index.html` / `styles.css`. Copy bank: [`marketing-copy.md`](marketing-copy.md).
+Working title **XBots** / **grokbots.store** is temporary (`xbots.io` is taken — do not claim it). Swap-friendly: search `data-brand`, `.brand-name`, `.brand-domain` in `index.html` / `styles.css`. Copy bank: [`marketing-copy.md`](marketing-copy.md).
 
 This is a discovery Open Plugin landing page — **not** an installer and **not** an official x.ai product.
 
@@ -46,14 +46,14 @@ GitHub’s **Deploy from a branch** UI only offers `/` or `/docs` — not `/site
 3. The workflow runs `sync-site-catalog.py` then uploads `site/`
 
 Expected URL: `https://dadoedo.github.io/grok-bot-marketplace-plugin/`  
-Placeholder domain: `xbots.so`
+Placeholder domain: `grokbots.store`
 
 ## Brand / asset slots
 
 | Token | Current |
 | --- | --- |
 | Short name | `XBots` |
-| Domain | `xbots.so` (placeholder) |
+| Domain | `grokbots.store` (placeholder) |
 | Mark | `assets/logo.png` (prefer `logo-marketplace.png` if added later) |
 | Hero | live `#featured` catalog cards — `hero.png` is not the landing hero |
 | OG | `assets/og.png` (real catalog faces on color fields) |

@@ -24,11 +24,12 @@ from typing import Any, Iterable
 
 PLUGIN_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CATALOG_PATH = PLUGIN_ROOT / "data" / "catalog.json"
+DEFAULT_FEED_URL = "https://grokbots.store/feed.json"
 MARKETPLACE_URL = "https://x.ai/bot/marketplace"
 MARKETPLACE_CATALOG_URL = f"{MARKETPLACE_URL}#marketplace-catalog"
 BOT_PAGE_URL = MARKETPLACE_URL + "/bots/{id}"
 USER_AGENT = (
-    "grok-bot-marketplace-plugin/0.3 "
+    "grok-bot-marketplace-plugin/0.4 "
     "(+https://github.com/dadoedo/grok-bot-marketplace-plugin)"
 )
 INSTALL_NOTE = (
@@ -355,10 +356,32 @@ def refresh_catalog(path: Path = DEFAULT_CATALOG_PATH) -> dict[str, Any]:
     return document
 
 
+def catalog_path_is_explicit(path: Path) -> bool:
+    try:
+        return path.resolve() != DEFAULT_CATALOG_PATH.resolve()
+    except OSError:
+        return str(path) != str(DEFAULT_CATALOG_PATH)
+
+
+def load_marketplace_for_cli(args: argparse.Namespace) -> tuple[dict[str, Any], str]:
+    """Hosted grokbots.store feed by default; snapshot if --offline or --catalog."""
+    import feed_client
+
+    offline = feed_client.offline_enabled(flag=bool(getattr(args, "offline", False)))
+    path = Path(args.catalog)
+    if offline or catalog_path_is_explicit(path):
+        return load_catalog(path), "snapshot"
+    feed = feed_client.load_feed(feed_url=getattr(args, "feed_url", None), offline=False)
+    document = feed_client.marketplace_document(feed)
+    source = str((feed.get("sources") or {}).get("dataSource") or "hosted")
+    return document, source
+
+
 def load_catalog(path: Path = DEFAULT_CATALOG_PATH) -> dict[str, Any]:
     if not path.is_file():
         raise CatalogError(
-            f"No catalog snapshot at {path}. Run: python3 scripts/catalog.py refresh"
+            f"No catalog snapshot at {path}. Run: python3 scripts/catalog.py refresh "
+            "or python3 ops/refresh_feed.py --from-snapshot --demo-x"
         )
     try:
         document = json.loads(path.read_text(encoding="utf-8"))
@@ -541,55 +564,70 @@ def cmd_refresh(args: argparse.Namespace) -> int:
 
 
 def cmd_list(args: argparse.Namespace) -> int:
-    document = load_catalog(Path(args.catalog))
+    document, data_source = load_marketplace_for_cli(args)
     bots = filter_bots(document["bots"], category=args.category)
     bots = sort_bots(bots, args.sort)
     if args.limit is not None:
         bots = bots[: args.limit]
-    extra = {"categories": document.get("categories")} if args.with_categories else None
+    extra: dict[str, Any] = {"dataSource": data_source}
+    if args.with_categories:
+        extra["categories"] = document.get("categories")
     _emit(envelope(document, bots, extra=extra), args.format)
     return 0
 
 
 def cmd_search(args: argparse.Namespace) -> int:
-    document = load_catalog(Path(args.catalog))
+    document, data_source = load_marketplace_for_cli(args)
     bots = filter_bots(document["bots"], query=args.query, category=args.category)
     bots = sort_bots(bots, args.sort)
     if args.limit is not None:
         bots = bots[: args.limit]
-    _emit(envelope(document, bots, extra={"query": args.query, "category": args.category}), args.format)
+    _emit(
+        envelope(
+            document,
+            bots,
+            extra={"query": args.query, "category": args.category, "dataSource": data_source},
+        ),
+        args.format,
+    )
     return 0
 
 
 def cmd_categories(args: argparse.Namespace) -> int:
-    document = load_catalog(Path(args.catalog))
+    document, data_source = load_marketplace_for_cli(args)
     payload = {
         "source": document.get("source"),
+        "feed": "marketplace",
         "fetchedAt": document.get("fetchedAt"),
         "botCount": document.get("botCount"),
         "categories": document.get("categories") or [],
         "install": document.get("install"),
+        "dataSource": data_source,
     }
     _emit(payload, args.format)
     return 0
 
 
 def cmd_show(args: argparse.Namespace) -> int:
-    document = load_catalog(Path(args.catalog))
+    document, data_source = load_marketplace_for_cli(args)
     found, missing = find_bots(document["bots"], args.ids)
     if args.details:
         found = [_safe_details(b) for b in found]
-    extra = {"missing": missing} if missing else None
+    extra: dict[str, Any] = {"dataSource": data_source}
+    if missing:
+        extra["missing"] = missing
     _emit(envelope(document, found, extra=extra), args.format)
     return 1 if missing and not found else 0
 
 
 def cmd_compare(args: argparse.Namespace) -> int:
-    document = load_catalog(Path(args.catalog))
+    document, data_source = load_marketplace_for_cli(args)
     found, missing = find_bots(document["bots"], args.ids)
     if args.details:
         found = [_safe_details(b) for b in found]
-    extra = {"missing": missing} if missing else None
+    extra = {"dataSource": data_source}
+    if missing:
+        extra["missing"] = missing
     _emit(envelope(document, found, extra=extra), args.format)
     return 1 if missing and not found else 0
 
@@ -614,32 +652,59 @@ def _emit(payload: dict[str, Any], fmt: str) -> None:
 
 
 def _shared_cli_flags() -> argparse.ArgumentParser:
-    """Flags that work before or after the subcommand (argparse parents)."""
+    """Flags that work before or after the subcommand (argparse parents).
+
+    Defaults are SUPPRESS so a flag parsed on the parent is not reset to the
+    subparser default (classic store_true / default overwrite bug).
+    """
     shared = argparse.ArgumentParser(add_help=False)
     shared.add_argument(
         "--catalog",
-        default=str(DEFAULT_CATALOG_PATH),
+        default=argparse.SUPPRESS,
         help="Path to catalog snapshot JSON (default: data/catalog.json)",
     )
     shared.add_argument(
         "--format",
         choices=("json", "text"),
-        default="json",
+        default=argparse.SUPPRESS,
         help="Output format (json for agents, text for humans). Default: json.",
     )
+    shared.add_argument(
+        "--feed-url",
+        dest="feed_url",
+        default=argparse.SUPPRESS,
+        help="Hosted feed JSON URL (default: GROKBOTS_FEED_URL or https://grokbots.store/feed.json)",
+    )
+    shared.add_argument(
+        "--offline",
+        action="store_true",
+        default=argparse.SUPPRESS,
+        help="Skip the hosted feed; use --catalog / bundled snapshot only",
+    )
     return shared
+
+
+def finalize_cli_args(args: argparse.Namespace) -> argparse.Namespace:
+    if not hasattr(args, "catalog"):
+        args.catalog = str(DEFAULT_CATALOG_PATH)
+    if not hasattr(args, "format"):
+        args.format = "json"
+    if not hasattr(args, "feed_url"):
+        args.feed_url = None
+    args.offline = bool(getattr(args, "offline", False))
+    return args
 
 
 def build_parser() -> argparse.ArgumentParser:
     shared = _shared_cli_flags()
     parser = argparse.ArgumentParser(
-        description="Browse the Grok Bot marketplace catalog and discover shares on X. "
-        "Install is via grokbot:// addHref only — no REST install API.",
+        description="Browse Grok Bots from the public grokbots.store feed "
+        "(marketplace + X viral). Install is via grokbot:// addHref only — no REST install API.",
         parents=[shared],
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
-    p_list = sub.add_parser("list", parents=[shared], help="List bots from the snapshot")
+    p_list = sub.add_parser("list", parents=[shared], help="List bots from the hosted feed (snapshot fallback)")
     p_list.add_argument(
         "--category",
         help="Filter by category (case-insensitive exact match, then substring fallback)",
@@ -691,7 +756,8 @@ def build_parser() -> argparse.ArgumentParser:
     p_refresh = sub.add_parser(
         "refresh",
         parents=[shared],
-        help="Fetch live marketplace HTML and rewrite data/catalog.json",
+        help="Operator helper: fetch live marketplace HTML and rewrite data/catalog.json "
+        "(prefer ops/refresh_feed.py on hetzner-prod)",
     )
     p_refresh.add_argument(
         "--list",
@@ -705,8 +771,8 @@ def build_parser() -> argparse.ArgumentParser:
     p_xs = sub.add_parser(
         "x-search",
         parents=[shared],
-        help="Search recent X posts that share Grok Bot marketplace/templates "
-        "(demo fixture if no token; --live requires X_BEARER_TOKEN)",
+        help="Viral/shared Grok Bot posts from the hosted feed "
+        "(--demo fixture; --live is operator X API, not the product path)",
     )
     x_feed.add_x_arguments(p_xs)
     p_xs.set_defaults(func=x_feed.cmd_search, sort="engagement")
@@ -715,7 +781,7 @@ def build_parser() -> argparse.ArgumentParser:
         "x-viral",
         aliases=["x-trending"],
         parents=[shared],
-        help="X feed ranked by engagement (demo fixture if no token; --live for API)",
+        help="Hosted xViral ranked by engagement (--demo fixture; --live operator X API)",
     )
     x_feed.add_x_arguments(p_xv)
     p_xv.set_defaults(func=x_feed.cmd_viral, sort="engagement")
@@ -723,7 +789,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_xm = sub.add_parser(
         "x-monitor",
         parents=[shared],
-        help="Fetch X posts newer than data/x-checkpoint.json (demo if no token; --live for API)",
+        help="Operator: live X since checkpoint (--live). Product path is hosted xViral."
     )
     x_feed.add_x_arguments(p_xm)
     p_xm.set_defaults(func=x_feed.cmd_monitor, sort="recent")
@@ -732,7 +798,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
-    args = parser.parse_args(argv)
+    args = finalize_cli_args(parser.parse_args(argv))
     try:
         return int(args.func(args))
     except CatalogError as exc:

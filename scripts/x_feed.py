@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
-"""Discover Grok Bot template shares on X (read/search only).
+"""X viral discovery for Grok Bot templates (read/search only).
 
-Uses official X API v2 recent search with an app-only Bearer token.
-Does not post. Does not call any marketplace install API.
+Product path (published plugin): read ``xViral`` from the hosted
+grokbots.store feed — no X credentials.
 
-Auth: set X_BEARER_TOKEN (aliases: TWITTER_BEARER_TOKEN, X_API_BEARER_TOKEN).
-Optional local `.env` in the plugin root is loaded with stdlib only; existing
-process env wins. Never logs or writes the token.
+Operator path (``ops/refresh_feed.py``, ``--live``): X API v2 recent search
+with app-only ``X_BEARER_TOKEN``. Does not post. Does not call any
+marketplace install API. Never logs or writes the token.
 
-Offline: ``--demo`` / ``X_DEMO=1`` (and missing-token fallback) reads
-``data/demo/x-search-recent.json``. ``--live`` requires a real token.
+Offline: ``--demo`` / ``X_DEMO=1`` reads ``data/demo/x-search-recent.json``.
 """
 
 from __future__ import annotations
@@ -34,7 +33,7 @@ DEFAULT_DEMO_PATH = PLUGIN_ROOT / "data" / "demo" / "x-search-recent.json"
 FIXTURE_DEMO_PATH = PLUGIN_ROOT / "tests" / "fixtures" / "x-search-recent.json"
 X_SEARCH_URL = "https://api.x.com/2/tweets/search/recent"
 USER_AGENT = (
-    "grok-bot-marketplace-plugin/0.3 "
+    "grok-bot-marketplace-plugin/0.4 "
     "(+https://github.com/dadoedo/grok-bot-marketplace-plugin)"
 )
 TOKEN_ENV_NAMES = (
@@ -50,12 +49,10 @@ DEFAULT_DISCOVERY_QUERY = (
     '("Grok Bot" (marketplace OR template OR share)))'
 )
 SETUP_HINT = (
-    "X search needs an app-only Bearer token from https://developer.x.com "
-    "(Developer Console → your App → Keys and tokens). "
-    "export X_BEARER_TOKEN='…' or copy .env.example to .env. "
-    "Without a token, x-* commands use the offline demo fixture "
-    "(pass --live to require credentials). "
-    "Marketplace list/search/compare still work without X."
+    "Operator-only: live X search needs an app-only Bearer token from "
+    "https://developer.x.com (App must sit on a Project). "
+    "The published plugin reads https://grokbots.store/feed.json and does not "
+    "need X_BEARER_TOKEN. On hetzner-prod: python3 ops/refresh_feed.py"
 )
 
 MARKETPLACE_BOT_RE = re.compile(
@@ -661,10 +658,66 @@ def emit(payload: dict[str, Any], fmt: str) -> None:
     sys.stdout.write("\n")
 
 
+def _run_hosted_x(args: argparse.Namespace, *, sort: str) -> int:
+    """Product path: xViral from grokbots.store / bundled snapshot. No Bearer."""
+    import feed_client
+
+    query = build_query(getattr(args, "query", None))
+    offline = feed_client.offline_enabled(flag=bool(getattr(args, "offline", False)))
+    try:
+        feed = feed_client.load_feed(
+            feed_url=getattr(args, "feed_url", None),
+            offline=offline,
+        )
+        xv = feed_client.x_viral_envelope(feed)
+        posts = list(xv.get("results") or [])
+    except feed_client.FeedError:
+        raw = load_demo_payload()
+        posts, _meta = posts_from_demo_payload(raw)
+        xv = {"source": "x-demo-fixture", "demo": True, "meta": _meta}
+        feed = {"sources": {"dataSource": "demo-fallback"}}
+        posts = filter_demo_posts(posts, getattr(args, "query", None))
+        posts = join_catalog(posts, Path(args.catalog))
+        posts = sort_posts(posts, sort)
+        extra = {
+            "sinceIdUsed": None,
+            "demo": True,
+            "live": False,
+            "mode": "hosted-feed-demo-fallback",
+            "sort": sort,
+            "dataSource": "demo-fallback",
+        }
+        emit(feed_envelope(posts=posts, query=query, meta=_meta, extra=extra), args.format)
+        return 0
+
+    posts = filter_demo_posts(posts, getattr(args, "query", None))
+    posts = join_catalog(posts, Path(args.catalog))
+    posts = sort_posts(posts, sort)
+    sources = feed.get("sources") or {}
+    extra = {
+        "sinceIdUsed": None,
+        "demo": bool(xv.get("demo")),
+        "live": False,
+        "mode": "hosted-feed",
+        "sort": sort,
+        "dataSource": sources.get("dataSource") or "hosted",
+        "feedUrl": sources.get("feedUrl") or feed_client.resolve_feed_url(explicit=getattr(args, "feed_url", None)),
+    }
+    meta = xv.get("meta") if isinstance(xv.get("meta"), dict) else {}
+    payload = feed_envelope(posts=posts, query=query, meta=meta, extra=extra)
+    payload["source"] = xv.get("source") or "hosted-feed"
+    emit(payload, args.format)
+    return 0
+
+
 def _run_search(args: argparse.Namespace, *, monitor: bool) -> int:
     live = bool(getattr(args, "live", False))
     demo = wants_demo(args)
     token: str | None = None
+
+    if not live and not demo:
+        return _run_hosted_x(args, sort=getattr(args, "sort", None) or ("recent" if monitor else "engagement"))
+
     try:
         token = resolve_bearer_token()
     except XAuthError as exc:
@@ -792,12 +845,12 @@ def add_x_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "--demo",
         action="store_true",
-        help="Use checked-in demo fixture (no network, no token required)",
+        help="Use checked-in demo fixture (CI / offline; no network)",
     )
     parser.add_argument(
         "--live",
         action="store_true",
-        help="Force live X API. Fails with setup instructions if no Bearer token",
+        help="Operator/debug: call X API directly. Requires X_BEARER_TOKEN. Not the product path.",
     )
 
 
@@ -828,8 +881,10 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
+    import catalog as catalog_mod
+
     parser = build_parser()
-    args = parser.parse_args(argv)
+    args = catalog_mod.finalize_cli_args(parser.parse_args(argv))
     if args.sort is None:
         args.sort = "recent" if args.command == "monitor" else "engagement"
     try:

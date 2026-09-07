@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import catalog  # noqa: E402
+import feed_client  # noqa: E402
 import x_feed  # noqa: E402
 
 
@@ -106,28 +107,24 @@ class AuthTests(unittest.TestCase):
             if k not in x_feed.TOKEN_ENV_NAMES and k != "X_DEMO"
         }
 
-    def test_cli_without_token_falls_back_to_demo(self):
+    def test_cli_without_token_uses_hosted_or_snapshot_not_user_bearer(self):
         env = self._stripped_env()
         err = io.StringIO()
         out = io.StringIO()
 
-        def boom(*_a, **_k):
-            raise AssertionError("demo fallback must not call X HTTP")
+        def boom(req, timeout=None):
+            raise urllib.error.URLError("no hosted feed in this test")
 
         with mock.patch.dict(os.environ, env, clear=True), mock.patch.object(
             x_feed, "DEFAULT_ENV_PATH", Path("/tmp/grok-bot-marketplace-no-env")
         ), mock.patch("sys.stderr", err), mock.patch("sys.stdout", out), mock.patch(
-            "x_feed.urllib.request.urlopen", boom
-        ):
+            "feed_client.urllib.request.urlopen", boom
+        ), mock.patch("x_feed.urllib.request.urlopen", boom):
             code = catalog.main(["x-search", "--max-results", "10"])
         self.assertEqual(code, 0)
-        setup = json.loads(err.getvalue())
-        self.assertEqual(setup["setup"]["env"], "X_BEARER_TOKEN")
-        self.assertTrue(setup["marketplaceStillWorks"])
-        self.assertTrue(setup["demoFallback"])
+        self.assertNotIn("developer.x.com", err.getvalue())
         payload = json.loads(out.getvalue())
-        self.assertTrue(payload["demo"])
-        self.assertFalse(payload["live"])
+        self.assertFalse(payload.get("live"))
         self.assertEqual(payload["feed"], "x")
         self.assertGreaterEqual(payload["resultCount"], 1)
         self.assertTrue(all(p.get("feed") == "x" for p in payload["results"]))
@@ -193,6 +190,7 @@ class SearchMockTests(unittest.TestCase):
                         "--catalog",
                         str(self.catalog),
                         "monitor",
+                        "--live",
                         "--checkpoint",
                         str(ck),
                         "--max-results",
@@ -210,6 +208,7 @@ class SearchMockTests(unittest.TestCase):
                         "--catalog",
                         str(self.catalog),
                         "monitor",
+                        "--live",
                         "--checkpoint",
                         str(ck),
                     ]

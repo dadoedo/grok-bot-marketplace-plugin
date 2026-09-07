@@ -3,6 +3,9 @@
 !.env.example
 .env.local
 data/x-checkpoint.json
+ops/refresh.log
+ops/*.pyc
+
 __pycache__/
 *.py[cod]
 *.egg-info/

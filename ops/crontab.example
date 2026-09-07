@@ -1,0 +1,10 @@
+# grokbots.store feed — install on hetzner-prod as stredan-cursor-agent
+#   crontab ops/crontab.example
+# Enable after copying ops/env.example → ~/grokbots/.env (chmod 600).
+# Do not run this cron on the Grok Bot agent box.
+
+SHELL=/bin/bash
+PATH=/usr/local/bin:/usr/bin:/bin
+
+# Every 30 minutes: scrape marketplace (+ X if Bearer present) and publish feed.json
+*/30 * * * * /home/stredan-cursor-agent/grokbots/ops/cron-refresh.sh

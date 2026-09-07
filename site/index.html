@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" data-brand="XBots" data-brand-domain="xbots.so" data-brand-status="temporary">
+<html lang="en" data-brand="XBots" data-brand-domain="grokbots.store" data-brand-status="temporary">
   <head>
     <!--
-      BRAND SWAP — working title "XBots" / xbots.so is TEMPORARY.
+      BRAND SWAP — working title "XBots" / grokbots.store is TEMPORARY.
       Search: data-brand, brand-name, brand-domain, og:title
       Visuals follow Grok Bot marketplace shape/color/avatar conventions.
       Catalog cards use live imageUrl / shape / color from catalog.json.
@@ -17,7 +17,7 @@
     <meta name="theme-color" content="#f8f6f2" />
     <link rel="icon" href="./assets/logo.png" type="image/png" />
     <link rel="apple-touch-icon" href="./assets/logo.png" />
-    <link rel="canonical" href="https://xbots.so/" />
+    <link rel="canonical" href="https://grokbots.store/" />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="XBots" />
@@ -57,14 +57,14 @@
             height="90"
             alt="XBots"
           />
-          <span class="brand-domain">xbots.so · working title</span>
+          <span class="brand-domain">grokbots.store · working title</span>
         </a>
         <div class="nav-links">
           <a href="#feeds">Feeds</a>
           <a href="#browse">Browse</a>
           <a href="#how">How it works</a>
           <a href="#cli">CLI</a>
-          <a href="#setup">X setup</a>
+          <a href="#setup">Feed</a>
           <a href="https://github.com/dadoedo/grok-bot-marketplace-plugin">GitHub</a>
         </div>
       </nav>
@@ -93,7 +93,7 @@
           </div>
           <p class="note">
             Directory listing ships after publish. Until then, clone or symlink the repo
-            as a local Cursor plugin. Placeholder domain <span class="brand-domain">xbots.so</span>.
+            as a local Cursor plugin. Placeholder domain <span class="brand-domain">grokbots.store</span>.
           </p>
         </div>
         <div class="hero-gallery" id="featured" aria-label="Featured Grok Bots from the marketplace catalog"></div>
@@ -119,8 +119,8 @@
             <p class="pill">feed: x</p>
             <h3>Viral shares on X</h3>
             <p>
-              Recent search for marketplace URLs and <code>grokbot://</code> templates.
-              <code>--demo</code> works offline. Live search uses your Bearer token.
+              Recent search for marketplace URLs and <code>grokbot://</code> templates,
+              published on grokbots.store. The plugin reads the public feed — no X API key.
             </p>
           </article>
         </div>
@@ -156,7 +156,7 @@
             <h3>X viral feed</h3>
             <p>
               Recent search for marketplace URLs and <code>grokbot://</code> shares.
-              <code>--demo</code> works offline. Live search uses your Bearer token.
+              Published on grokbots.store by hetzner-prod. You do not set a Bearer token.
             </p>
           </article>
           <article class="step">
@@ -177,34 +177,31 @@
         </div>
         <div class="terminal">
           <div class="terminal-bar">plugin root</div>
-          <pre><span class="comment"># Official catalog</span>
+          <pre><span class="comment"># Hosted feed (no API key)</span>
 python3 scripts/catalog.py search "outbound" --format text
 python3 scripts/catalog.py compare researchy tinkabot
+python3 scripts/catalog.py x-viral --format text
 
-<span class="comment"># X feed — fixture, no key</span>
-python3 scripts/catalog.py x-viral --demo --format text
-
-<span class="comment"># Live recent search</span>
-python3 scripts/catalog.py x-search --live --format text</pre>
+<span class="comment"># Offline snapshot</span>
+python3 scripts/catalog.py list --offline</pre>
         </div>
       </section>
 
       <section class="wrap" id="setup">
         <div class="section-head">
-          <h2>X setup</h2>
-          <p class="kicker">App-only Bearer · never committed</p>
+          <h2>Public feed</h2>
+          <p class="kicker">https://grokbots.store/feed.json</p>
         </div>
         <div class="setup-grid">
           <ol class="setup">
-            <li>Create a Project + App at <a href="https://developer.x.com">developer.x.com</a>.</li>
-            <li>Copy the Bearer Token (not the API key).</li>
-            <li><code>cp .env.example .env</code> and set <code>X_BEARER_TOKEN</code>.</li>
-            <li><code>python3 scripts/catalog.py x-viral --live</code></li>
+            <li>Install the plugin (cursor.directory or a local symlink).</li>
+            <li>CLI/skills fetch <code>https://grokbots.store/feed.json</code>.</li>
+            <li>Override with <code>GROKBOTS_FEED_URL</code> if needed. <code>--offline</code> uses the bundled snapshot.</li>
+            <li>Operators refresh the feed on hetzner-prod — you never set an X Bearer token.</li>
           </ol>
           <div class="env">
-            X_BEARER_TOKEN=<br />
-            TWITTER_BEARER_TOKEN=<br />
-            X_DEMO=1
+            GROKBOTS_FEED_URL=https://grokbots.store/feed.json<br />
+            GROKBOTS_OFFLINE=1
           </div>
         </div>
       </section>
@@ -214,7 +211,7 @@ python3 scripts/catalog.py x-search --live --format text</pre>
       <div class="foot-row">
         <div>
           <strong class="brand-name">XBots</strong>
-          <div>xbots.so · Grok Bot Marketplace Plugin · MIT</div>
+          <div>grokbots.store · Grok Bot Marketplace Plugin · MIT</div>
         </div>
         <div class="foot-links">
           <a href="https://github.com/dadoedo/grok-bot-marketplace-plugin">GitHub</a>
@@ -226,7 +223,7 @@ python3 scripts/catalog.py x-search --live --format text</pre>
       <p class="legal">
         Independent open-source discovery tool. Not affiliated with xAI or Cursor.
         Avatars, names, shapes, and colors come from the public marketplace catalog.
-        Working title XBots / xbots.so is temporary. We do not install bots.
+        Working title grokbots.store. We do not install bots.
       </p>
     </footer>
     <script src="./app.js" type="module"></script>

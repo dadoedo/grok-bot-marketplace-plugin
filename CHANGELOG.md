@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0
+
+- Plugin reads public `https://grokbots.store/feed.json` (`GROKBOTS_FEED_URL`) with `data/feed.json` snapshot fallback. Users do not need `X_BEARER_TOKEN`.
+- `ops/refresh_feed.py` for hetzner-prod: marketplace scrape + X recent search → merged feed; R2 bucket `grokbots-feed`.
+- Brand domain: grokbots.store (replaces xbots.so placeholders).
+
 ## 0.3.1
 
 - Static landing site in `site/` (GitHub Pages via Actions). Working title XBots / xbots.so.

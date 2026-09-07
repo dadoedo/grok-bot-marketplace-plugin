@@ -1,8 +1,8 @@
 {
   "name": "grok-bot-marketplace",
   "displayName": "Grok Bot Marketplace",
-  "version": "0.3.0",
-  "description": "Browse the public Grok Bot marketplace catalog and discover template shares on X. Returns grokbot:// install links — there is no public install API.",
+  "version": "0.4.0",
+  "description": "Browse public Grok Bots from grokbots.store (marketplace catalog + X viral). Returns grokbot:// install links — there is no public install API.",
   "author": {
     "name": "David Stredansky",
     "email": "d.stredansky@gmail.com"

@@ -1,8 +1,8 @@
 # XBots marketing copy
 
-Working product name **XBots**. Placeholder domain **xbots.so**. Do not claim **xbots.io** (taken). Domain shortlist is provisional — do not buy from this file.
+Working product name **XBots**. Placeholder domain **grokbots.store**. Do not claim **xbots.io** (taken). Domain shortlist is provisional — do not buy from this file.
 
-Brand swap: search `data-brand`, `XBots`, `xbots.so` in `index.html`, `styles.css`, and this file.
+Brand swap: search `data-brand`, `XBots`, `grokbots.store` in `index.html`, `styles.css`, and this file.
 
 Repo: https://github.com/dadoedo/grok-bot-marketplace-plugin  
 Publish: [cursor.directory](https://cursor.directory) (`/plugins/new` after merge)
@@ -21,14 +21,14 @@ Product truth: Cursor Open Plugin that **discovers** Grok Bots. Not an installer
 
 - A Cursor Open Plugin with two discovery feeds: the public Grok Bot marketplace catalog, and the templates people actually share on X. Agents return cards. You still open Add yourself.
 - Browse official x.ai marketplace bots (real names, shapes, creator photos) and recent X posts that share `grokbot://` templates. Read/search only.
-- Skills + CLI. Stdlib Python. Offline demo for the X feed before a Bearer token lands.
+- Skills + CLI. Stdlib Python. Hosted grokbots.store feed; `--offline` uses the bundled snapshot.
 
 ## Features (site + directory)
 
 1. **Marketplace catalog** — list / search / compare / refresh from public SSR HTML + `data/catalog.json`. Cards include `name`, `creator`, `description`, `categories`, `addHref`, `marketplaceUrl`.
 2. **X viral feed** — recent search for marketplace URLs and `grokbot://` shares. `x-viral` ranks by engagement. `--demo` / `X_DEMO=1` works with no key.
 3. **Honest install** — no marketplace REST install API. Open the deep link in Grok Bot or the marketplace page.
-4. **Secrets in env** — `X_BEARER_TOKEN` (aliases `TWITTER_BEARER_TOKEN`, `X_API_BEARER_TOKEN`). `.env` is gitignored. Tokens are never logged.
+4. **Hosted feed** — plugin reads `https://grokbots.store/feed.json`. Operators keep `X_BEARER_TOKEN` on hetzner-prod only. Never commit `.env`.
 5. **Agent-ready** — skills `grok-bot-marketplace` and `grok-bot-x-feed`; CLI `python3 scripts/catalog.py`.
 
 ## CTAs
@@ -39,7 +39,7 @@ Product truth: Cursor Open Plugin that **discovers** Grok Bots. Not an installer
 
 ## Honesty / disclaimer
 
-Cursor Open Plugin for discovery — not an installer, not a store, not an official x.ai or Cursor product. Add still means a `grokbot://` deep link or the marketplace URL. Independent MIT project. Working title XBots / xbots.so is temporary.
+Cursor Open Plugin for discovery — not an installer, not a store, not an official x.ai or Cursor product. Add still means a `grokbot://` deep link or the marketplace URL. Independent MIT project. Working title XBots / grokbots.store is temporary.
 
 ## Social blurbs
 
@@ -58,10 +58,10 @@ Two feeds for Grok Bots: marketplace catalog + viral shares on X. No fake instal
 **Name:** XBots  
 **Tagline:** Discover Grok Bots from the marketplace and from X  
 **Description:**  
-XBots is a Cursor Open Plugin so agents can browse public Grok Bots. One feed is the official x.ai marketplace catalog (list, search, compare). The other watches X for viral/shared `grokbot://` templates. It does not install bots — it returns the deep link and marketplace URL. Offline demo for the X feed; live search uses your own Bearer token.
+XBots is a Cursor Open Plugin so agents can browse public Grok Bots from grokbots.store (official marketplace catalog + viral shares). It does not install bots — it returns the deep link and marketplace URL. No X API key for users.
 
 **First comment sketch:**  
-Built this because there is no public marketplace install API — and inventing one would be a lie. Catalog is scraped SSR + a snapshot. X feed is official recent search. Happy to hear which bots you actually want agents to find first.
+Built this because there is no public marketplace install API — and inventing one would be a lie. The plugin reads a public grokbots.store feed. Operators refresh marketplace HTML + X on hetzner-prod. Happy to hear which bots you actually want agents to find first.
 
 ## Meta
 
@@ -76,11 +76,11 @@ RDAP-free shortlist (not purchased from this repo):
 
 | Domain | Note |
 | --- | --- |
-| **xbots.so** | Default placeholder in copy |
+| **grokbots.store** | Default placeholder in copy |
 | findxbots.com | |
 | grokxbots.com | |
 | getxbots.com | |
 | findgrokbots.com | |
 | xbots.io | **Taken — do not claim** |
 
-Until a domain is locked, ship GitHub Pages and keep `xbots.so` labeled as a working title.
+Until a domain is locked, ship GitHub Pages and keep `grokbots.store` labeled as a working title.
