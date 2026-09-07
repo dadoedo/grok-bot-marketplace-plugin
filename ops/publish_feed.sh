@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Upload feed.json to Cloudflare R2 bucket grokbots-feed (Stredan).
-# Operator script for hetzner-prod. Does not print secrets.
+# Public URL goal (later custom domain / Worker): https://grokbots.store/feed.json
+# Operator script for hetzner-prod. Does not print secrets. Not a scrape Worker.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

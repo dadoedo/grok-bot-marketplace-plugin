@@ -118,7 +118,7 @@ Reload Cursor (**Developer: Reload Window**) → **Customize**.
 
 ## Operators (hetzner-prod)
 
-Refresh host: `stredan-cursor-agent@46.224.84.45` (`Host stredan-cursor-hetzner-prod`). Publish object `feed.json` to R2 bucket `grokbots-feed` (Cloudflare Stredan). Full crontab, env, and wrangler/S3 steps: [`ops/README.md`](ops/README.md).
+Refresh host: `stredan-cursor-agent@46.224.84.45` (`Host stredan-cursor-hetzner-prod`). Not the Grok Bot agent box. Upload `feed.json` to R2 bucket `grokbots-feed` (Stredan). Custom domain / Worker in front of `https://grokbots.store/feed.json` is later — DNS is already on Cloudflare. Crontab, wrangler/S3, env: [`ops/README.md`](ops/README.md).
 
 ## Layout
 
